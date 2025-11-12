@@ -1,4 +1,0 @@
-Animation info
-
-Idle: 20 frames, 238 X 298
-IdleToWalk: 10 frames, 238 X 298

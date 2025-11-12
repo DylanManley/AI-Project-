@@ -114,6 +114,64 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
+
+	mousePos = sf::Mouse::getPosition(m_window);
+	boardPos = m_window.mapPixelToCoords(mousePos);
+
+	for(int i = 0; i < GRID_SIZE; i++)
+	{
+		if (grid[i].getGlobalBounds().contains(boardPos))
+		{
+			grid[i].setFillColor(sf::Color::Green);
+		}
+		else
+		{
+			grid[i].setFillColor(sf::Color::White);
+		}
+	}
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+	{
+		if (!selectedPiece)
+		{
+			if (!snake.placed && snake.sprite->getGlobalBounds().contains(boardPos))
+			{
+				selectedPiece = &snake;
+				snake.selected = true;
+				return;
+			}
+			if (!frog.placed && frog.sprite->getGlobalBounds().contains(boardPos))
+			{
+				selectedPiece = &frog;
+				frog.selected = true;
+				return;
+			}
+			for (int i = 0; i < 3; i++)
+			{
+				if (!donkey[i].placed && donkey[i].sprite->getGlobalBounds().contains(boardPos))
+				{
+					selectedPiece = &donkey[i];
+					donkey[i].selected = true;
+					return;
+				}
+			}
+		}
+
+		if (selectedPiece)
+		{
+			for (int i = 0; i < GRID_SIZE; i++)
+			{
+				if (grid[i].getGlobalBounds().contains(boardPos))
+				{
+					selectedPiece->place(grid[i].getPosition());
+					selectedPiece->selected = false;
+					selectedPiece = nullptr;
+					return;
+				}
+			}
+		}
+	}
+
 }
 
 /// <summary>
@@ -127,6 +185,15 @@ void Game::render()
 	{
 		m_window.draw(grid[i]);
 	}
+
+	m_window.draw(*snake.sprite);
+	m_window.draw(*frog.sprite);
+
+	for (int i = 0; i < 3; i++)
+	{
+		m_window.draw(*donkey[i].sprite);
+	}
+
 
 	m_window.display();
 }
@@ -156,7 +223,32 @@ void Game::setupTexts()
 /// </summary>
 void Game::setupSprites()
 {
-		
+
+	if (!snakeTex.loadFromFile("ASSETS\\IMAGES\\Snake.jpg"))
+	{
+		std::cout << "error loading snake" << std::endl;
+	}
+
+	if (!frogTex.loadFromFile("ASSETS\\IMAGES\\Frog.jpg"))
+	{
+		std::cout << "error loading frog" << std::endl;
+	}
+
+	if (!donkeyTex.loadFromFile("ASSETS\\IMAGES\\Donkey.jpg"))
+	{
+		std::cout << "error loading donkey" << std::endl;
+	}
+
+	xPos = 210;
+	yPos = 500;
+
+	snake.setUp(snakeTex, sf::Vector2f{ 10, yPos });
+	frog.setUp(frogTex, sf::Vector2f{ 110, yPos });
+	for (int i = 0; i < 3; i++)
+	{
+		donkey[i].setUp(donkeyTex, sf::Vector2f{xPos, yPos});
+		xPos += 100;
+	}
 }
 
 /// <summary>
@@ -169,6 +261,9 @@ void Game::setupAudio()
 
 void Game::setupGrid()
 {
+	xPos = 2;
+	yPos = 10;
+
 	for (int i = 0; i < GRID_SIZE; i++)
 	{
 		grid[i].setPosition(sf::Vector2f{ xPos, yPos });
@@ -188,3 +283,7 @@ void Game::setupGrid()
 		}
 	}
 }
+
+
+
+

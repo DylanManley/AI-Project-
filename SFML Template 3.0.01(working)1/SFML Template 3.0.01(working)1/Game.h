@@ -16,6 +16,13 @@
 /// </summary>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include "Pieces.h"
+
+enum class GameState
+{
+	PLACING,
+	PLAYING
+};
 
 class Game
 {
@@ -48,11 +55,25 @@ private:
 	sf::Sound m_DELETEsound{ m_DELETEsoundBuffer }; // sound object to play
 	bool m_DELETEexitGame; // control exiting game
 
+	GameState gameState = GameState::PLACING;
+
 	static const int GRID_SIZE = 24;
 	sf::RectangleShape grid[GRID_SIZE];
 	float xPos = 2;
 	float yPos = 5;
 
+	sf::Texture snakeTex;
+	sf::Texture frogTex;
+	sf::Texture donkeyTex;
+
+	sf::Vector2i mousePos;
+	sf::Vector2f boardPos;
+
+	Snake snake;
+	Frog frog;
+	Donkey donkey[3];
+
+	pieces* selectedPiece = nullptr;
 };
 
 #pragma warning( pop ) 
