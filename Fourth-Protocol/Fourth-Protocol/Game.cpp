@@ -119,22 +119,22 @@ void Game::update(sf::Time t_deltaTime)
 	mousePos = sf::Mouse::getPosition(m_window);
 	boardPos = m_window.mapPixelToCoords(mousePos);
 
-	for (int i = 0; i < GRID_SIZE; i++)
-	{
-		if (grid[i].isHovered(boardPos))
-		{
-			grid[i].setColour(sf::Color(0, 255, 0, 120));
-		}
-		else
-		{
-			grid[i].setColour(sf::Color::White);
-		}
-	}
-
 	if (gameState == GameState::PLACING) // Placing Pieces
 	{
 		if (playerTurn) // Player Turn
 		{
+			for (int i = 0; i < GRID_SIZE; i++)
+			{
+				if (grid[i].isHovered(boardPos))
+				{
+					grid[i].setColour(sf::Color(0, 255, 0, 120));
+				}
+				else
+				{
+					grid[i].setColour(sf::Color::White);
+				}
+			}
+
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 			{
 				if (!selectedPiece)
@@ -241,6 +241,117 @@ void Game::update(sf::Time t_deltaTime)
 			gameState = GameState::PLAYING;
 		}
 
+	}
+	else if (gameState == GameState::PLAYING) // Playing Game
+	{
+		if (playerTurn) // Player Turn
+		{
+			/*for (int i = 0; i < GRID_SIZE; i++)
+			{
+				if (grid[i].isHovered(boardPos) && selectedPiece != nullptr)
+				{
+					grid[i].setColour(sf::Color(0, 0, 255, 120));
+				}
+				else if (grid[i].isHovered(boardPos) && !grid[i].isPossibleMove())
+				{
+					grid[i].setColour(sf::Color::White);
+				}
+			}*/
+
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+			{
+				if (!selectedPiece)
+				{
+					if (snake.sprite->getGlobalBounds().contains(boardPos))
+					{
+						selectedPiece = &snake;
+						snake.selected = true;
+						snake.shape.setFillColor(sf::Color::Blue);
+
+						for (int i = 0; i < GRID_SIZE; i++)
+						{
+
+						}
+						
+						return;
+					}
+					if (frog.sprite->getGlobalBounds().contains(boardPos))
+					{
+						selectedPiece = &frog;
+						frog.selected = true;
+						frog.shape.setFillColor(sf::Color::Blue);
+
+						for (int i = 0; i < GRID_SIZE; i++)
+						{
+
+						}
+
+						return;
+					}
+					for (int i = 0; i < 3; i++)
+					{
+						if (donkey[i].sprite->getGlobalBounds().contains(boardPos))
+						{
+							selectedPiece = &donkey[i];
+							donkey[i].selected = true;
+							donkey[i].shape.setFillColor(sf::Color::Blue);
+
+							for (int i = 0; i < GRID_SIZE; i++)
+							{
+								if (grid[i].isHovered(boardPos))
+								{
+									int tile = i - 1;
+
+									if (tile >= 0 && tile < GRID_SIZE)
+									{
+										if (!grid[tile].isOccupied())
+										{
+											grid[tile].setPossibleMove(true);
+											grid[tile].setColour(sf::Color(0, 0, 255, 70));
+										}
+									}
+
+									tile = i + 1;
+
+									if (tile >= 0 && tile < GRID_SIZE)
+									{
+										if (!grid[tile].isOccupied())
+										{
+											grid[tile].setPossibleMove(true);
+											grid[tile].setColour(sf::Color(0, 0, 255, 70));
+										}
+									}
+
+									tile = i - 5;
+
+									if (tile >= 0 && tile < GRID_SIZE)
+									{
+										if (!grid[tile].isOccupied())
+										{
+											grid[tile].setPossibleMove(true);
+											grid[tile].setColour(sf::Color(0, 0, 255, 70));
+										}
+									}
+
+									tile = i + 5;
+
+									if (tile >= 0 && tile < GRID_SIZE)
+									{
+										if (!grid[tile].isOccupied())
+										{
+											grid[tile].setPossibleMove(true);
+											grid[tile].setColour(sf::Color(0, 0, 255, 70));
+										}
+									}
+								}
+							}
+
+							return;
+						}
+					}
+				}
+			}
+		}
 	}
 }
 

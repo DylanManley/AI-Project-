@@ -37,6 +37,11 @@ bool Tile::isOccupied()
 	return occupied;
 }
 
+bool Tile::isPossibleMove()
+{
+	return possibleMove;
+}
+
 void Tile::setPosition(sf::Vector2f t_position)
 {
 	shape.setPosition(t_position);
@@ -50,6 +55,11 @@ void Tile::setColour(sf::Color t_colour)
 void Tile::setOccupied(bool t_occupied)
 {
 	occupied = t_occupied;
+}
+
+void Tile::setPossibleMove(bool t_possibleMove)
+{
+	possibleMove = t_possibleMove;
 }
 
 sf::Vector2f Tile::getPosition()
