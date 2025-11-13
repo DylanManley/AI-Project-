@@ -65,6 +65,7 @@ private:
 	float yPos = 5;
 
 	bool playerTurn = true;
+	int placedPieces = 0;
 
 	sf::Texture snakeTex;
 	sf::Texture frogTex;
@@ -76,6 +77,10 @@ private:
 	Snake snake;
 	Frog frog;
 	Donkey donkey[3];
+
+	Snake aiSnake;
+	Frog aiFrog;
+	Donkey aiDonkey[3];
 
 	pieces* selectedPiece = nullptr;
 };

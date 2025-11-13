@@ -3,6 +3,7 @@
 class pieces
 {
 public:
+    sf::RectangleShape shape;
     sf::Sprite *sprite = nullptr;
     sf::Vector2f pos;
     bool placed = false;

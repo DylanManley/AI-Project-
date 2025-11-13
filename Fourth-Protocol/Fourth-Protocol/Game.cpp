@@ -46,6 +46,7 @@ void Game::run()
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	const float fps{ 60.0f };
 	sf::Time timePerFrame = sf::seconds(1.0f / fps); // 60 fps
+	srand(time(nullptr));
 	while (m_window.isOpen())
 	{
 		processEvents(); // as many as possible
@@ -122,7 +123,7 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		if (grid[i].isHovered(boardPos))
 		{
-			grid[i].setColour(sf::Color::Green);
+			grid[i].setColour(sf::Color(0, 255, 0, 120));
 		}
 		else
 		{
@@ -142,12 +143,14 @@ void Game::update(sf::Time t_deltaTime)
 					{
 						selectedPiece = &snake;
 						snake.selected = true;
+						snake.shape.setFillColor(sf::Color::Green);
 						return;
 					}
 					if (!frog.placed && frog.sprite->getGlobalBounds().contains(boardPos))
 					{
 						selectedPiece = &frog;
 						frog.selected = true;
+						frog.shape.setFillColor(sf::Color::Green);
 						return;
 					}
 					for (int i = 0; i < 3; i++)
@@ -156,6 +159,7 @@ void Game::update(sf::Time t_deltaTime)
 						{
 							selectedPiece = &donkey[i];
 							donkey[i].selected = true;
+							donkey[i].shape.setFillColor(sf::Color::Green);
 							return;
 						}
 					}
@@ -171,6 +175,8 @@ void Game::update(sf::Time t_deltaTime)
 							selectedPiece->place(grid[i].getPosition());
 							selectedPiece->selected = false;
 							selectedPiece = nullptr;
+							playerTurn = false;
+							placedPieces++;
 							return;
 						}
 					}
@@ -179,8 +185,62 @@ void Game::update(sf::Time t_deltaTime)
 		}
 		else // AI Turn
 		{
+			int pieceChoice = rand() % 3 + 1;
+			int tileChoice = rand() % GRID_SIZE;
 
+			while (grid[tileChoice].isOccupied())
+			{
+				tileChoice = rand() % GRID_SIZE;
+			}
+
+			switch (pieceChoice)
+			{
+			case 1:
+				if (!aiSnake.placed)
+				{
+					selectedPiece = &aiSnake;
+					aiSnake.shape.setFillColor(sf::Color::Red);
+				}
+				break;
+			case 2:
+				if (!aiFrog.placed)
+				{
+					selectedPiece = &aiFrog;
+					aiFrog.shape.setFillColor(sf::Color::Red);
+				}
+				break;
+			case 3:
+				for (int i = 0; i < 3; i++)
+				{
+					if (!aiDonkey[i].placed)
+					{
+						selectedPiece = &aiDonkey[i];
+						aiDonkey[i].shape.setFillColor(sf::Color::Red);
+						break;
+					}
+				}
+				break;
+			default:
+				break;
+			}
+
+			if (selectedPiece)
+			{
+				grid[tileChoice].setOccupied(true);
+				selectedPiece->place(grid[tileChoice].getPosition());
+				selectedPiece->selected = false;
+				selectedPiece = nullptr;
+				playerTurn = true;
+				placedPieces++;
+				return;
+			}
 		}
+
+		if (placedPieces >= 10)
+		{
+			gameState = GameState::PLAYING;
+		}
+
 	}
 }
 
@@ -196,14 +256,27 @@ void Game::render()
 		grid[i].render(m_window);
 	}
 
+	m_window.draw(snake.shape);
+	m_window.draw(frog.shape);
 	m_window.draw(*snake.sprite);
 	m_window.draw(*frog.sprite);
 
 	for (int i = 0; i < 3; i++)
 	{
+		m_window.draw(donkey[i].shape);
 		m_window.draw(*donkey[i].sprite);
 	}
 
+	m_window.draw(aiSnake.shape);
+	m_window.draw(aiFrog.shape);
+	m_window.draw(*aiSnake.sprite);
+	m_window.draw(*aiFrog.sprite);
+	
+	for (int i = 0; i < 3; i++)
+	{
+		m_window.draw(aiDonkey[i].shape);
+		m_window.draw(*aiDonkey[i].sprite);
+	}
 
 	m_window.display();
 }
@@ -259,6 +332,17 @@ void Game::setupSprites()
 		donkey[i].setUp(donkeyTex, sf::Vector2f{xPos, yPos});
 		xPos += 100;
 	}
+
+	xPos = -10000;
+	yPos = -10000;
+
+	aiSnake.setUp(snakeTex, sf::Vector2f{ 10, yPos });
+	aiFrog.setUp(frogTex, sf::Vector2f{ 110, yPos });
+	for (int i = 0; i < 3; i++)
+	{
+		aiDonkey[i].setUp(donkeyTex, sf::Vector2f{ xPos, yPos });
+		xPos += 100;
+	}
 }
 
 /// <summary>
@@ -282,7 +366,7 @@ void Game::setupGrid()
 		if (xPos >= 400)
 		{
 			yPos += 100;
-			xPos = 2;
+			xPos = 0;
 		}
 		else
 		{
