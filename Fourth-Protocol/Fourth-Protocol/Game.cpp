@@ -118,60 +118,70 @@ void Game::update(sf::Time t_deltaTime)
 	mousePos = sf::Mouse::getPosition(m_window);
 	boardPos = m_window.mapPixelToCoords(mousePos);
 
-	for(int i = 0; i < GRID_SIZE; i++)
+	for (int i = 0; i < GRID_SIZE; i++)
 	{
-		if (grid[i].getGlobalBounds().contains(boardPos))
+		if (grid[i].isHovered(boardPos))
 		{
-			grid[i].setFillColor(sf::Color::Green);
+			grid[i].setColour(sf::Color::Green);
 		}
 		else
 		{
-			grid[i].setFillColor(sf::Color::White);
+			grid[i].setColour(sf::Color::White);
 		}
 	}
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+	if (gameState == GameState::PLACING) // Placing Pieces
 	{
-		if (!selectedPiece)
+		if (playerTurn) // Player Turn
 		{
-			if (!snake.placed && snake.sprite->getGlobalBounds().contains(boardPos))
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 			{
-				selectedPiece = &snake;
-				snake.selected = true;
-				return;
-			}
-			if (!frog.placed && frog.sprite->getGlobalBounds().contains(boardPos))
-			{
-				selectedPiece = &frog;
-				frog.selected = true;
-				return;
-			}
-			for (int i = 0; i < 3; i++)
-			{
-				if (!donkey[i].placed && donkey[i].sprite->getGlobalBounds().contains(boardPos))
+				if (!selectedPiece)
 				{
-					selectedPiece = &donkey[i];
-					donkey[i].selected = true;
-					return;
+					if (!snake.placed && snake.sprite->getGlobalBounds().contains(boardPos))
+					{
+						selectedPiece = &snake;
+						snake.selected = true;
+						return;
+					}
+					if (!frog.placed && frog.sprite->getGlobalBounds().contains(boardPos))
+					{
+						selectedPiece = &frog;
+						frog.selected = true;
+						return;
+					}
+					for (int i = 0; i < 3; i++)
+					{
+						if (!donkey[i].placed && donkey[i].sprite->getGlobalBounds().contains(boardPos))
+						{
+							selectedPiece = &donkey[i];
+							donkey[i].selected = true;
+							return;
+						}
+					}
+				}
+
+				if (selectedPiece)
+				{
+					for (int i = 0; i < GRID_SIZE; i++)
+					{
+						if (grid[i].isHovered(boardPos) && !grid[i].isOccupied())
+						{
+							grid[i].setOccupied(true);
+							selectedPiece->place(grid[i].getPosition());
+							selectedPiece->selected = false;
+							selectedPiece = nullptr;
+							return;
+						}
+					}
 				}
 			}
 		}
-
-		if (selectedPiece)
+		else // AI Turn
 		{
-			for (int i = 0; i < GRID_SIZE; i++)
-			{
-				if (grid[i].getGlobalBounds().contains(boardPos))
-				{
-					selectedPiece->place(grid[i].getPosition());
-					selectedPiece->selected = false;
-					selectedPiece = nullptr;
-					return;
-				}
-			}
+
 		}
 	}
-
 }
 
 /// <summary>
@@ -183,7 +193,7 @@ void Game::render()
 
 	for (int i = 0; i < GRID_SIZE; i++)
 	{
-		m_window.draw(grid[i]);
+		grid[i].render(m_window);
 	}
 
 	m_window.draw(*snake.sprite);
@@ -261,18 +271,15 @@ void Game::setupAudio()
 
 void Game::setupGrid()
 {
-	xPos = 2;
-	yPos = 10;
+	xPos = 0;
+	yPos = 4;
 
 	for (int i = 0; i < GRID_SIZE; i++)
 	{
+		grid[i].setup();
 		grid[i].setPosition(sf::Vector2f{ xPos, yPos });
-		grid[i].setSize(sf::Vector2f{ 100, 100 });
-		grid[i].setFillColor(sf::Color::White);
-		grid[i].setOutlineColor(sf::Color::Black);
-		grid[i].setOutlineThickness(5);
 
-		if (xPos >= 500)
+		if (xPos >= 400)
 		{
 			yPos += 100;
 			xPos = 2;
@@ -283,7 +290,3 @@ void Game::setupGrid()
 		}
 	}
 }
-
-
-
-

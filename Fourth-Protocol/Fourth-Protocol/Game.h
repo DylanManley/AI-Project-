@@ -17,6 +17,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "Pieces.h"
+#include "Tile.h"
 
 enum class GameState
 {
@@ -57,10 +58,13 @@ private:
 
 	GameState gameState = GameState::PLACING;
 
-	static const int GRID_SIZE = 24;
-	sf::RectangleShape grid[GRID_SIZE];
+	static const int GRID_SIZE = 25;
+	Tile grid[GRID_SIZE];
+
 	float xPos = 2;
 	float yPos = 5;
+
+	bool playerTurn = true;
 
 	sf::Texture snakeTex;
 	sf::Texture frogTex;
