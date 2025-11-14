@@ -39,6 +39,8 @@ private:
 	void checkKeyboardState();
 	void update(sf::Time t_deltaTime);
 	void render();
+
+	void showPossibleMoves(int t_pieceType);
 	
 	void setupTexts();
 	void setupSprites();
