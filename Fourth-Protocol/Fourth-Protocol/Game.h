@@ -40,12 +40,13 @@ private:
 	void update(sf::Time t_deltaTime);
 	void render();
 
-	void showPossibleMoves(int t_pieceType);
+	void showPossibleMoves();
 	
 	void setupTexts();
 	void setupSprites();
 	void setupAudio();
 	void setupGrid();
+	void clearMoves();
 	
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_jerseyFont;// font used by message

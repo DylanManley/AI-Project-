@@ -1,4 +1,5 @@
 #include "SFML/Graphics.hpp"
+#include "Tile.h"
 
 class pieces
 {
@@ -13,22 +14,27 @@ public:
 
     virtual void place(sf::Vector2f position);
 
-    virtual void move() = 0;
+    virtual void highlightTiles(Tile grid[], int index, int jumpOffset = 0);
+
+    virtual void showMoves(Tile grid[], int gridPos) = 0;
+
+    virtual void move(sf::Vector2f t_position);
 };
 
 class Donkey : public pieces
 {
 public:
-
-	void move() override;
+    virtual void showMoves(Tile grid[], int gridPos) override;
 };
 
 class Snake : public pieces
 {
-	void move() override;
+public:
+    virtual void showMoves(Tile grid[], int gridPos) override;
 };
 
 class Frog : public pieces
 {
-	void move() override;
+public:
+    virtual void showMoves(Tile grid[], int gridPos) override;
 };

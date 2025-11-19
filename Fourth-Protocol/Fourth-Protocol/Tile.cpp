@@ -66,3 +66,8 @@ sf::Vector2f Tile::getPosition()
 {
 	return shape.getPosition();
 }
+
+sf::RectangleShape Tile::getShape()
+{
+	return shape;
+}

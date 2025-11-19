@@ -21,6 +21,7 @@ public:
 	void setPossibleMove(bool t_possibleMove);
 
 	sf::Vector2f getPosition();
+	sf::RectangleShape getShape();
 
 
 private:

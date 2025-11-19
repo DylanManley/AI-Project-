@@ -268,7 +268,7 @@ void Game::update(sf::Time t_deltaTime)
 						snake.selected = true;
 						snake.shape.setFillColor(sf::Color::Blue);
 
-						showPossibleMoves(2); // Show moves for snake
+						showPossibleMoves(); // Show moves for snake
 						
 						return;
 					}
@@ -278,7 +278,7 @@ void Game::update(sf::Time t_deltaTime)
 						frog.selected = true;
 						frog.shape.setFillColor(sf::Color::Blue);
 
-						showPossibleMoves(3); // Show moves for frog
+						showPossibleMoves(); // Show moves for frog
 
 						return;
 					}
@@ -290,10 +290,25 @@ void Game::update(sf::Time t_deltaTime)
 							donkey[i].selected = true;
 							donkey[i].shape.setFillColor(sf::Color::Blue);
 
-							showPossibleMoves(1); // Show moves for donkey
+							showPossibleMoves(); // Show moves for donkey
 
 							return;
 						}
+					}
+
+				}
+				else
+				{
+					for (int i = 0; i < GRID_SIZE; i++)
+					{
+						if (grid[i].isHovered(boardPos) && grid[i].isPossibleMove())
+						{
+							selectedPiece->move(grid[i].getPosition());
+							grid[i].setOccupied(true);
+							selectedPiece->selected = false;
+							selectedPiece = nullptr;
+						}
+						clearMoves();
 					}
 				}
 			}
@@ -338,199 +353,13 @@ void Game::render()
 	m_window.display();
 }
 
-void Game::showPossibleMoves(int t_pieceType)
+void Game::showPossibleMoves()
 {
-	for (int i = 0; i < GRID_SIZE; i++) // Highlight possible moves
+	for (int i = 0; i < GRID_SIZE; i++)
 	{
 		if (grid[i].isHovered(boardPos))
 		{
-			int tile = i - 1;
-			if (tile >= 0 && tile < GRID_SIZE && tile % 5 != 4)	// Left
-			{
-				if (!grid[tile].isOccupied())
-				{
-					grid[tile].setPossibleMove(true);
-					grid[tile].setColour(sf::Color(0, 0, 255, 70));
-				}
-				else if (grid[tile].isOccupied() && t_pieceType == 3)
-				{
-					tile = i - 2;	// Jump Left
-
-					if (tile >= 0 && tile < GRID_SIZE)
-					{
-						if (!grid[tile].isOccupied())
-						{
-							grid[tile].setPossibleMove(true);
-							grid[tile].setColour(sf::Color(0, 0, 255, 70));
-						}
-					}
-				}
-			}
-
-			tile = i + 1;
-			if (tile >= 0 && tile < GRID_SIZE && tile % 5 != 0)	// Right
-			{
-				if (!grid[tile].isOccupied())
-				{
-					grid[tile].setPossibleMove(true);
-					grid[tile].setColour(sf::Color(0, 0, 255, 70));
-				}
-				else if (grid[tile].isOccupied() && t_pieceType == 3)
-				{
-					tile = i + 2;	// Jump Right
-
-					if (tile >= 0 && tile < GRID_SIZE)
-					{
-						if (!grid[tile].isOccupied())
-						{
-							grid[tile].setPossibleMove(true);
-							grid[tile].setColour(sf::Color(0, 0, 255, 70));
-						}
-					}
-				}
-			}
-
-			tile = i - 5;
-			if (tile >= 0 && tile < GRID_SIZE)	// Up
-			{
-				if (!grid[tile].isOccupied())
-				{
-					grid[tile].setPossibleMove(true);
-					grid[tile].setColour(sf::Color(0, 0, 255, 70));
-				}
-				else if (grid[tile].isOccupied() && t_pieceType == 3)
-				{
-					tile = i - 10;	// Jump Up
-
-					if (tile >= 0 && tile < GRID_SIZE)
-					{
-						if (!grid[tile].isOccupied())
-						{
-							grid[tile].setPossibleMove(true);
-							grid[tile].setColour(sf::Color(0, 0, 255, 70));
-						}
-					}
-				}
-			}
-
-			tile = i + 5;
-			if (tile >= 0 && tile < GRID_SIZE)	// Down
-			{
-				if (!grid[tile].isOccupied())
-				{
-					grid[tile].setPossibleMove(true);
-					grid[tile].setColour(sf::Color(0, 0, 255, 70));
-				}
-				else if (grid[tile].isOccupied() && t_pieceType == 3)
-				{
-					tile = i + 10;	// Jump Down
-
-					if (tile >= 0 && tile < GRID_SIZE)
-					{
-						if (!grid[tile].isOccupied())
-						{
-							grid[tile].setPossibleMove(true);
-							grid[tile].setColour(sf::Color(0, 0, 255, 70));
-						}
-					}
-				}
-			}
-
-			if (t_pieceType > 1) // Snake and Frog
-			{
-				tile = i - 6;
-				if (tile >= 0 && tile < GRID_SIZE && tile % 5 != 4)	// Up Left
-				{
-					if (!grid[tile].isOccupied())
-					{
-						grid[tile].setPossibleMove(true);
-						grid[tile].setColour(sf::Color(0, 0, 255, 70));
-					}
-					else if (grid[tile].isOccupied() && t_pieceType == 3)
-					{
-						tile = i - 12;	// Jump Up Left
-
-						if (tile >= 0 && tile < GRID_SIZE)
-						{
-							if (!grid[tile].isOccupied())
-							{
-								grid[tile].setPossibleMove(true);
-								grid[tile].setColour(sf::Color(0, 0, 255, 70));
-							}
-						}
-					}
-				}
-
-				tile = i - 4;
-				if (tile >= 0 && tile < GRID_SIZE && tile % 5 != 0)	// Up Right
-				{
-					if (!grid[tile].isOccupied())
-					{
-						grid[tile].setPossibleMove(true);
-						grid[tile].setColour(sf::Color(0, 0, 255, 70));
-					}
-					else if (grid[tile].isOccupied() && t_pieceType == 3)
-					{
-						tile = i - 8;	// Jump Up Right
-
-						if (tile >= 0 && tile < GRID_SIZE)
-						{
-							if (!grid[tile].isOccupied())
-							{
-								grid[tile].setPossibleMove(true);
-								grid[tile].setColour(sf::Color(0, 0, 255, 70));
-							}
-						}
-					}
-				}
-
-				tile = i + 4;
-				if (tile >= 0 && tile < GRID_SIZE && tile % 5 != 4)	// Down Left
-				{
-					if (!grid[tile].isOccupied())
-					{
-						grid[tile].setPossibleMove(true);
-						grid[tile].setColour(sf::Color(0, 0, 255, 70));
-					}
-					else if (grid[tile].isOccupied() && t_pieceType == 3)
-					{
-						tile = i + 8;	// Jump Down Left
-
-						if (tile >= 0 && tile < GRID_SIZE)
-						{
-							if (!grid[tile].isOccupied())
-							{
-								grid[tile].setPossibleMove(true);
-								grid[tile].setColour(sf::Color(0, 0, 255, 70));
-							}
-						}
-					}
-				}
-
-				tile = i + 6;
-				if (tile >= 0 && tile < GRID_SIZE && tile % 5 != 0)	// Down Right
-				{
-					if (!grid[tile].isOccupied())
-					{
-						grid[tile].setPossibleMove(true);
-						grid[tile].setColour(sf::Color(0, 0, 255, 70));
-					}
-					else if (grid[tile].isOccupied() && t_pieceType == 3)
-					{
-						tile = i + 12;	// Jump Down Right
-
-						if (tile >= 0 && tile < GRID_SIZE)
-						{
-							if (!grid[tile].isOccupied())
-							{
-								grid[tile].setPossibleMove(true);
-								grid[tile].setColour(sf::Color(0, 0, 255, 70));
-							}
-						}
-					}
-				}
-			}
-			
+			selectedPiece->showMoves(grid, i);
 		}
 	}
 }
@@ -540,6 +369,9 @@ void Game::showPossibleMoves(int t_pieceType)
 /// </summary>
 void Game::setupTexts()
 {
+
+
+
 	if (!m_jerseyFont.openFromFile("ASSETS\\FONTS\\Jersey20-Regular.ttf"))
 	{
 		std::cout << "problem loading arial black font" << std::endl;
@@ -551,6 +383,8 @@ void Game::setupTexts()
 	m_DELETEwelcomeMessage.setOutlineColor(sf::Color::Black);
 	m_DELETEwelcomeMessage.setFillColor(sf::Color::Red);
 	m_DELETEwelcomeMessage.setOutlineThickness(2.0f);
+
+
 
 }
 
@@ -597,6 +431,8 @@ void Game::setupSprites()
 		aiDonkey[i].setUp(donkeyTex, sf::Vector2f{ xPos, yPos });
 		xPos += 100;
 	}
+
+	std::cout << "sprites working";
 }
 
 /// <summary>
@@ -628,3 +464,13 @@ void Game::setupGrid()
 		}
 	}
 }
+
+void Game::clearMoves()
+{
+	for (int i = 0; i < GRID_SIZE; i++)
+	{
+		/*grid[i].getShape().setFillColor(sf::Color::White);
+		grid[i].setPossibleMove(false);*/
+	}
+}
+
