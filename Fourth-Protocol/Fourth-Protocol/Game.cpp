@@ -297,15 +297,12 @@ void Game::update(sf::Time t_deltaTime)
 				}
 				else
 				{
+					int currentTileIndex = selectedPiece->getCurrentTileIndex(grid);
+					grid[currentTileIndex].setOccupied(false);
 					for (int i = 0; i < GRID_SIZE; i++)
 					{
-						if (grid[i].getShape().getGlobalBounds().contains(selectedPiece->pos))
-						{
-							grid[i].setOccupied(false);
-						}
-
 						if (grid[i].isHovered(boardPos) && grid[i].isPossibleMove())
-						{
+						{							
 							selectedPiece->move(grid[i].getPosition());
 							grid[i].setOccupied(true);
 							grid[i].setOwner(1);

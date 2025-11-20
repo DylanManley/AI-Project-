@@ -62,7 +62,7 @@ int pieces::getCurrentTileIndex(Tile grid[])
 {
     for (int i = 0; i < 25; i++)
     {
-        if (grid[i].getShape().getGlobalBounds().contains(sprite->getPosition()))
+        if (grid[i].getShape().getGlobalBounds().contains(pos))
         {
             //std::cout << std::endl;
 			//std::cout << "Piece Position: (" << shape.getPosition().x << ", " << shape.getPosition().y << ")" << std::endl;
