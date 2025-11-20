@@ -19,6 +19,10 @@ public:
 	void setColour(sf::Color t_colour);
 	void setOccupied(bool t_occupied);
 	void setPossibleMove(bool t_possibleMove);
+	void setOwner(int t_owner);
+	int getOwner();
+
+	int owner = 0; //0 = empty, 1 = player, 2 = AI
 
 	sf::Vector2f getPosition();
 	sf::RectangleShape getShape();

@@ -172,6 +172,7 @@ void Game::update(sf::Time t_deltaTime)
 						if (grid[i].isHovered(boardPos) && !grid[i].isOccupied())
 						{
 							grid[i].setOccupied(true);
+							grid[i].setOwner(1);
 							selectedPiece->place(grid[i].getPosition());
 							selectedPiece->selected = false;
 							selectedPiece = nullptr;
@@ -185,54 +186,54 @@ void Game::update(sf::Time t_deltaTime)
 		}
 		else // AI Turn
 		{
-			int pieceChoice = rand() % 3 + 1;
-			int tileChoice = rand() % GRID_SIZE;
+			int bestTile = ai.getBestPlacement(grid);
 
-			while (grid[tileChoice].isOccupied())
+			if (bestTile != -1) 
 			{
-				tileChoice = rand() % GRID_SIZE;
-			}
+				int pieceChoice = rand() % 3 + 1;
 
-			switch (pieceChoice)
-			{
-			case 1:
-				if (!aiSnake.placed)
+				switch (pieceChoice)
 				{
-					selectedPiece = &aiSnake;
-					aiSnake.shape.setFillColor(sf::Color::Red);
-				}
-				break;
-			case 2:
-				if (!aiFrog.placed)
-				{
-					selectedPiece = &aiFrog;
-					aiFrog.shape.setFillColor(sf::Color::Red);
-				}
-				break;
-			case 3:
-				for (int i = 0; i < 3; i++)
-				{
-					if (!aiDonkey[i].placed)
+				case 1:
+					if (!aiSnake.placed)
 					{
-						selectedPiece = &aiDonkey[i];
-						aiDonkey[i].shape.setFillColor(sf::Color::Red);
-						break;
+						selectedPiece = &aiSnake;
+						aiSnake.shape.setFillColor(sf::Color::Red);
 					}
+					break;
+				case 2:
+					if (!aiFrog.placed)
+					{
+						selectedPiece = &aiFrog;
+						aiFrog.shape.setFillColor(sf::Color::Red);
+					}
+					break;
+				case 3:
+					for (int i = 0; i < 3; i++)
+					{
+						if (!aiDonkey[i].placed)
+						{
+							selectedPiece = &aiDonkey[i];
+							aiDonkey[i].shape.setFillColor(sf::Color::Red);
+							break;
+						}
+					}
+					break;
+				default:
+					break;
 				}
-				break;
-			default:
-				break;
-			}
 
-			if (selectedPiece)
-			{
-				grid[tileChoice].setOccupied(true);
-				selectedPiece->place(grid[tileChoice].getPosition());
-				selectedPiece->selected = false;
-				selectedPiece = nullptr;
-				playerTurn = true;
-				placedPieces++;
-				return;
+				if (selectedPiece)
+				{
+					grid[bestTile].setOccupied(true);
+					grid[bestTile].setOwner(2); // AI is player 2
+					selectedPiece->place(grid[bestTile].getPosition());
+					selectedPiece->selected = false;
+					selectedPiece = nullptr;
+					playerTurn = true;
+					placedPieces++;
+					return;
+				}
 			}
 		}
 
@@ -312,9 +313,9 @@ void Game::update(sf::Time t_deltaTime)
 				}
 			}
 		}
-		else //AI Turn
+		else // AI Turn
 		{
-
+			
 		}
 
 	}

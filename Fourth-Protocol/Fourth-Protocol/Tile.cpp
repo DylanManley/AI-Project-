@@ -35,6 +35,16 @@ void Tile::setup()
 	occupied = false;
 }
 
+void Tile::setOwner(int t_owner)
+{
+	owner = t_owner;
+}
+
+int Tile::getOwner()
+{
+	return owner;
+}
+
 bool Tile::isHovered(sf::Vector2f t_mousePos)
 {
 	return (shape.getGlobalBounds().contains(t_mousePos));

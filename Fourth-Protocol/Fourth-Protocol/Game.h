@@ -16,8 +16,8 @@
 /// </summary>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include "Pieces.h"
 #include "Tile.h"
+#include "MiniMax.h"
 
 enum class GameState
 {
@@ -86,6 +86,8 @@ private:
 	Donkey aiDonkey[3];
 
 	pieces* selectedPiece = nullptr;
+
+	MiniMax ai;
 };
 
 #pragma warning( pop ) 
