@@ -246,18 +246,6 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		if (playerTurn) // Player Turn
 		{
-			/*for (int i = 0; i < GRID_SIZE; i++)
-			{
-				if (grid[i].isHovered(boardPos) && selectedPiece != nullptr)
-				{
-					grid[i].setColour(sf::Color(0, 0, 255, 120));
-				}
-				else if (grid[i].isHovered(boardPos) && !grid[i].isPossibleMove())
-				{
-					grid[i].setColour(sf::Color::White);
-				}
-			}*/
-
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 			{
 				if (!selectedPiece)
@@ -295,20 +283,31 @@ void Game::update(sf::Time t_deltaTime)
 							return;
 						}
 					}
+					for (int i = 0; i < 25; i++)
+					{
+						std::cout << "Grid: " << i << "\tisPossibleMove: " << grid[i].isPossibleMove() << "\tisOccupied: " << grid[i].isOccupied() << std::endl;
+					}
 
 				}
 				else
 				{
 					for (int i = 0; i < GRID_SIZE; i++)
 					{
+						if (grid[i].getShape().getGlobalBounds().contains(selectedPiece->pos))
+						{
+							grid[i].setOccupied(false);
+						}
+
 						if (grid[i].isHovered(boardPos) && grid[i].isPossibleMove())
 						{
 							selectedPiece->move(grid[i].getPosition());
 							grid[i].setOccupied(true);
 							selectedPiece->selected = false;
 							selectedPiece = nullptr;
+							clearMoves();
+							playerTurn = false;
+							break;
 						}
-						clearMoves();
 					}
 				}
 			}
@@ -469,8 +468,7 @@ void Game::clearMoves()
 {
 	for (int i = 0; i < GRID_SIZE; i++)
 	{
-		/*grid[i].getShape().setFillColor(sf::Color::White);
-		grid[i].setPossibleMove(false);*/
+		grid[i].setPossibleMove(false);
 	}
 }
 

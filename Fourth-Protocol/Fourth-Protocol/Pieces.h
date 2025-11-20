@@ -14,7 +14,7 @@ public:
 
     virtual void place(sf::Vector2f position);
 
-    virtual void highlightTiles(Tile grid[], int index, int jumpOffset = 0);
+    virtual void SetMoves(Tile grid[], int index, int jumpOffset = 0);
 
     virtual void showMoves(Tile grid[], int gridPos) = 0;
 

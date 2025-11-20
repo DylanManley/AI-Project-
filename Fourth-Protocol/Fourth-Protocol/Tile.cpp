@@ -14,6 +14,14 @@ void Tile::update()
 
 void Tile::render(sf::RenderWindow& t_window)
 {
+	if (possibleMove)
+	{
+		shape.setFillColor(sf::Color(0, 0, 255, 70));
+	}
+	else
+	{
+		shape.setFillColor(sf::Color::White);
+	}
 	t_window.draw(shape);
 }
 
