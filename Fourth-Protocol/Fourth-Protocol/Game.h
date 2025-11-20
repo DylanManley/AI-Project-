@@ -88,6 +88,8 @@ private:
 	pieces* selectedPiece = nullptr;
 
 	MiniMax ai;
+
+	bool singleClick = true;
 };
 
 #pragma warning( pop ) 

@@ -75,7 +75,10 @@ void Game::processEvents()
 		{
 			processKeys(newEvent);
 		}
-
+		if (newEvent->is<sf::Event::MouseButtonReleased>()) // user let go of left click
+		{
+			singleClick = true;
+		}
 	}
 }
 
@@ -135,8 +138,9 @@ void Game::update(sf::Time t_deltaTime)
 				}
 			}
 
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && singleClick == true)
 			{
+				singleClick = false;
 				if (!selectedPiece)
 				{
 					if (!snake.placed && snake.sprite->getGlobalBounds().contains(boardPos))
@@ -247,8 +251,9 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		if (playerTurn) // Player Turn
 		{
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && singleClick == true)
 			{
+				singleClick = false;
 				if (!selectedPiece)
 				{
 					if (snake.sprite->getGlobalBounds().contains(boardPos))
@@ -284,10 +289,10 @@ void Game::update(sf::Time t_deltaTime)
 							return;
 						}
 					}
-					for (int i = 0; i < 25; i++)
+					/*for (int i = 0; i < 25; i++)
 					{
 						std::cout << "Grid: " << i << "\tisPossibleMove: " << grid[i].isPossibleMove() << "\tisOccupied: " << grid[i].isOccupied() << std::endl;
-					}
+					}*/
 
 				}
 				else
@@ -303,6 +308,7 @@ void Game::update(sf::Time t_deltaTime)
 						{
 							selectedPiece->move(grid[i].getPosition());
 							grid[i].setOccupied(true);
+							grid[i].setOwner(1);
 							selectedPiece->selected = false;
 							selectedPiece = nullptr;
 							clearMoves();
@@ -315,9 +321,50 @@ void Game::update(sf::Time t_deltaTime)
 		}
 		else // AI Turn
 		{
-			
-		}
+			int bestTile = ai.getBestPlacement(grid);
 
+			if (bestTile != 1)
+			{
+				int pieceChoice = rand() % 3 + 1;
+				int chosenDonkey = rand() % 3;
+
+				switch (pieceChoice)
+				{
+				case 1:
+					selectedPiece = &aiSnake;
+					break;
+				case 2:
+					selectedPiece = &aiFrog;
+					break;
+				case 3:
+					selectedPiece = &aiDonkey[chosenDonkey];
+					break;
+				default:
+					break;
+				}
+			}
+
+			if (selectedPiece != nullptr)
+			{
+				int currentTileIndex = selectedPiece->getCurrentTileIndex(grid);
+				showPossibleMoves();
+				for (int i = 0; i < GRID_SIZE; i++)
+				{
+					if (grid[i].isPossibleMove())
+					{
+						grid[currentTileIndex].setOccupied(false);
+						selectedPiece->move(grid[i].getPosition());
+						grid[i].setOccupied(true);
+						grid[i].setOwner(2);
+						selectedPiece->selected = false;
+						selectedPiece = nullptr;
+						clearMoves();
+						playerTurn = true;
+						break;
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -360,13 +407,17 @@ void Game::render()
 
 void Game::showPossibleMoves()
 {
-	for (int i = 0; i < GRID_SIZE; i++)
+	/*for (int i = 0; i < GRID_SIZE; i++)
 	{
 		if (grid[i].isHovered(boardPos))
 		{
 			selectedPiece->showMoves(grid, i);
 		}
-	}
+	}*/
+
+	int currentTileIndex = selectedPiece->getCurrentTileIndex(grid);
+	selectedPiece->showMoves(grid, currentTileIndex);
+
 }
 
 /// <summary>
@@ -418,22 +469,22 @@ void Game::setupSprites()
 	xPos = 210;
 	yPos = 500;
 
-	snake.setUp(snakeTex, sf::Vector2f{ 10, yPos });
-	frog.setUp(frogTex, sf::Vector2f{ 110, yPos });
+	snake.setUp(snakeTex, sf::Vector2f{ 10, yPos }, false);
+	frog.setUp(frogTex, sf::Vector2f{ 110, yPos }, false);
 	for (int i = 0; i < 3; i++)
 	{
-		donkey[i].setUp(donkeyTex, sf::Vector2f{xPos, yPos});
+		donkey[i].setUp(donkeyTex, sf::Vector2f{xPos, yPos}, false);
 		xPos += 100;
 	}
 
 	xPos = -10000;
 	yPos = -10000;
 
-	aiSnake.setUp(snakeTex, sf::Vector2f{ 10, yPos });
-	aiFrog.setUp(frogTex, sf::Vector2f{ 110, yPos });
+	aiSnake.setUp(snakeTex, sf::Vector2f{ 10, yPos }, true);
+	aiFrog.setUp(frogTex, sf::Vector2f{ 110, yPos }, true);
 	for (int i = 0; i < 3; i++)
 	{
-		aiDonkey[i].setUp(donkeyTex, sf::Vector2f{ xPos, yPos });
+		aiDonkey[i].setUp(donkeyTex, sf::Vector2f{ xPos, yPos }, true);
 		xPos += 100;
 	}
 

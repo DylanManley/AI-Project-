@@ -1,5 +1,6 @@
 #include "SFML/Graphics.hpp"
 #include "Tile.h"
+#include <iostream>
 
 class pieces
 {
@@ -9,8 +10,9 @@ public:
     sf::Vector2f pos;
     bool placed = false;
     bool selected = false;
+	bool aiControlled = false;
 
-    virtual void setUp(sf::Texture& texture, sf::Vector2f position);
+    virtual void setUp(sf::Texture& texture, sf::Vector2f position, bool ai);
 
     virtual void place(sf::Vector2f position);
 
@@ -19,6 +21,8 @@ public:
     virtual void showMoves(Tile grid[], int gridPos) = 0;
 
     virtual void move(sf::Vector2f t_position);
+
+    virtual int getCurrentTileIndex(Tile grid[]);
 };
 
 class Donkey : public pieces
