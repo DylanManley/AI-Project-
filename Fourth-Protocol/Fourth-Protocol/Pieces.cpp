@@ -32,12 +32,12 @@ void pieces::SetMoves(Tile grid[], int index, int jumpOffset)
         }
         else if (jumpOffset != 0)
         {
-            /*int jumpIndex = index + jumpOffset;
-            if (jumpIndex >= 0 && jumpIndex < 24 && !grid[jumpIndex].isOccupied())
+            int jumpIndex = index + jumpOffset;
+            if (jumpIndex >= 0 && jumpIndex < 25 && !grid[jumpIndex].isOccupied())
             {
                 grid[jumpIndex].setPossibleMove(true);
                 grid[jumpIndex].setColour(sf::Color(0, 0, 255, 70));
-            }*/
+            }
         }
     }
 }
@@ -53,27 +53,27 @@ void pieces::move(sf::Vector2f position)
 void Donkey::showMoves(Tile grid[], int gridPos)
 {
     //left
-    if (gridPos % 5 != 0) SetMoves(grid, gridPos - 1, -1);
+    if (gridPos % 5 != 0) SetMoves(grid, gridPos - 1, 0);
     // Right
-    if (gridPos % 5 != 4) SetMoves(grid, gridPos + 1, 1);
+    if (gridPos % 5 != 4) SetMoves(grid, gridPos + 1, 0);
     // Up
-    if (gridPos - 5 >= 0) SetMoves(grid, gridPos - 5, -5);
+    if (gridPos - 5 >= 0) SetMoves(grid, gridPos - 5, 0);
     // Down
-    if (gridPos + 5 < 24) SetMoves(grid, gridPos + 5, 5);
+    if (gridPos + 5 < 25) SetMoves(grid, gridPos + 5, 0);
 }
 
 void Snake::showMoves(Tile grid[], int gridPos)
 {
    
-    if (gridPos % 5 != 0) SetMoves(grid, gridPos - 1, -1);  //left
-    if (gridPos % 5 != 4) SetMoves(grid, gridPos + 1, 1); // Right
-    if (gridPos - 5 >= 0) SetMoves(grid, gridPos - 5, -5);  // Up
-    if (gridPos + 5 < 24) SetMoves(grid, gridPos + 5, 5); // Down
+    if (gridPos % 5 != 0) SetMoves(grid, gridPos - 1, 0);  //left
+    if (gridPos % 5 != 4) SetMoves(grid, gridPos + 1, 0); // Right
+    if (gridPos - 5 >= 0) SetMoves(grid, gridPos - 5, 0);  // Up
+    if (gridPos + 5 < 25) SetMoves(grid, gridPos + 5, 0); // Down
 
-    if (gridPos % 5 != 0 && gridPos - 5 >= 0) SetMoves(grid, gridPos - 6, -6); // Up Left
-    if (gridPos % 5 != 4 && gridPos - 5 >= 0) SetMoves(grid, gridPos - 4, -4); // Up Right
-    if (gridPos % 5 != 0 && gridPos + 5 < 24) SetMoves(grid, gridPos + 4, 4); // Down Left
-    if (gridPos % 5 != 4 && gridPos + 5 < 24) SetMoves(grid, gridPos + 6, 6); // Down Right
+    if (gridPos % 5 != 0 && gridPos - 5 >= 0) SetMoves(grid, gridPos - 6, 0); // Up Left
+    if (gridPos % 5 != 4 && gridPos - 5 >= 0) SetMoves(grid, gridPos - 4, 0); // Up Right
+    if (gridPos % 5 != 0 && gridPos + 5 < 25) SetMoves(grid, gridPos + 4, 0); // Down Left
+    if (gridPos % 5 != 4 && gridPos + 5 < 25) SetMoves(grid, gridPos + 6, 0); // Down Right
 }
 
 void Frog::showMoves(Tile grid[], int gridPos)
@@ -81,10 +81,10 @@ void Frog::showMoves(Tile grid[], int gridPos)
     if (gridPos % 5 != 0) SetMoves(grid, gridPos - 1, -1);  //left
     if (gridPos % 5 != 4) SetMoves(grid, gridPos + 1, 1); // Right
     if (gridPos - 5 >= 0) SetMoves(grid, gridPos - 5, -5);  // Up
-    if (gridPos + 5 < 24) SetMoves(grid, gridPos + 5, 5); // Down
+    if (gridPos + 5 < 25) SetMoves(grid, gridPos + 5, 5); // Down
 
     if (gridPos % 5 != 0 && gridPos - 5 >= 0) SetMoves(grid, gridPos - 6, -6); // Up Left
     if (gridPos % 5 != 4 && gridPos - 5 >= 0) SetMoves(grid, gridPos - 4, -4); // Up Right
-    if (gridPos % 5 != 0 && gridPos + 5 < 24) SetMoves(grid, gridPos + 4, 4); // Down Left
-    if (gridPos % 5 != 4 && gridPos + 5 < 24) SetMoves(grid, gridPos + 6, 6); // Down Right
+    if (gridPos % 5 != 0 && gridPos + 5 < 25) SetMoves(grid, gridPos + 4, 4); // Down Left
+    if (gridPos % 5 != 4 && gridPos + 5 < 25) SetMoves(grid, gridPos + 6, 6); // Down Right
 }

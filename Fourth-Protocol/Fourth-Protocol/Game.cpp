@@ -312,6 +312,11 @@ void Game::update(sf::Time t_deltaTime)
 				}
 			}
 		}
+		else //AI Turn
+		{
+
+		}
+
 	}
 }
 
