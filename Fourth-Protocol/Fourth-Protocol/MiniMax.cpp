@@ -45,7 +45,7 @@ int MiniMax::checkAllLines(Tile grid[])
     // Check all horizontal lines
     for (int row = 0; row < 5; row++)
     {
-        for (int col = 0; col <= 1; col++)
+        for (int col = 0; col < 1; col++)
         {
             int indices[5] = {
                 row * 5 + col,
@@ -61,7 +61,7 @@ int MiniMax::checkAllLines(Tile grid[])
     // Check all vertical lines
     for (int col = 0; col < 5; col++)
     {
-        for (int row = 0; row <= 1; row++)
+        for (int row = 0; row < 1; row++)
         {
             int indices[5] = {
                 (row + 0) * 5 + col,
@@ -149,6 +149,7 @@ int MiniMax::scoreLine(int aiCount, int playerCount, int emptyCount)
     // Score AI opportunities
     if (aiCount > 0)
     {
+        if (aiCount == 4) return 700;
         if (aiCount == 3) return 400;  
         if (aiCount == 2) return 75; 
         if (aiCount == 1) return 10;   
@@ -157,6 +158,7 @@ int MiniMax::scoreLine(int aiCount, int playerCount, int emptyCount)
     // Score blocking player threats
     if (playerCount > 0)
     {
+        if (playerCount == 4) return 1200;
         if (playerCount == 3) return 1000;  // Block
         if (playerCount == 2) return 90;  
         if (playerCount == 1) return 5;
