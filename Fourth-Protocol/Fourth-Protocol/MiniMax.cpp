@@ -47,11 +47,12 @@ int MiniMax::checkAllLines(Tile grid[])
     {
         for (int col = 0; col <= 1; col++)
         {
-            int indices[4] = {
+            int indices[5] = {
                 row * 5 + col,
                 row * 5 + col + 1,
                 row * 5 + col + 2,
-                row * 5 + col + 3
+                row * 5 + col + 3,
+                row * 5 + col + 4
             };
             totalScore += evaluateLine(grid, indices);
         }
@@ -62,11 +63,12 @@ int MiniMax::checkAllLines(Tile grid[])
     {
         for (int row = 0; row <= 1; row++)
         {
-            int indices[4] = {
+            int indices[5] = {
                 (row + 0) * 5 + col,
                 (row + 1) * 5 + col,
                 (row + 2) * 5 + col,
-                (row + 3) * 5 + col
+                (row + 3) * 5 + col,
+                (row + 4) * 5 + col
             };
             totalScore += evaluateLine(grid, indices);
         }
@@ -83,16 +85,17 @@ int MiniMax::checkAllLines(Tile grid[])
         int startRow = diagStarts[i][0];
         int startCol = diagStarts[i][1];
 
-        int indices[4] = {
+        int indices[5] = {
             (startRow + 0) * 5 + (startCol + 0),
             (startRow + 1) * 5 + (startCol + 1),
             (startRow + 2) * 5 + (startCol + 2),
-            (startRow + 3) * 5 + (startCol + 3)
+            (startRow + 3) * 5 + (startCol + 3),
+            (startRow + 4) * 5 + (startCol + 4)
         };
         totalScore += evaluateLine(grid, indices);
     }
 
-    // Check all diagonal lines
+    // Check all diagonal lines (top right - bottom left)
     int antiDiagStarts[][2] = {
         {0, 4}, {0, 3},
         {1, 4}         
@@ -103,11 +106,12 @@ int MiniMax::checkAllLines(Tile grid[])
         int startRow = antiDiagStarts[i][0];
         int startCol = antiDiagStarts[i][1];
 
-        int indices[4] = {
+        int indices[5] = {
             (startRow + 0) * 5 + (startCol - 0),
             (startRow + 1) * 5 + (startCol - 1),
             (startRow + 2) * 5 + (startCol - 2),
-            (startRow + 3) * 5 + (startCol - 3)
+            (startRow + 3) * 5 + (startCol - 3),
+            (startRow + 4) * 5 + (startCol - 4)
         };
         totalScore += evaluateLine(grid, indices);
     }
@@ -115,14 +119,14 @@ int MiniMax::checkAllLines(Tile grid[])
     return totalScore;
 }
 
-int MiniMax::evaluateLine(Tile grid[], int indices[4])
+int MiniMax::evaluateLine(Tile grid[], int indices[5])
 {
     int aiCount = 0;
     int playerCount = 0;
     int emptyCount = 0;
 
     // Count pieces in this line
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 5; i++)
     {
         int owner = grid[indices[i]].getOwner();
         if (owner == 2) // AI

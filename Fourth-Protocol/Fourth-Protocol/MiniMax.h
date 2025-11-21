@@ -14,5 +14,5 @@ private:
 
     int scoreLine(int aiCount, int playerCount, int emptyCount);
 
-    int evaluateLine(Tile grid[], int indices[4]);
+    int evaluateLine(Tile grid[], int indices[5]);
 };
