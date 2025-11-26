@@ -1,18 +1,39 @@
 #pragma once
 #include "Pieces.h"
 
+struct Move
+{
+    int pieceIndex; // Index of piece to move
+    int fromTile; // Current tile
+	int toTile; // Target tile
+	int score; // Score
+};
+
 class MiniMax
 {
 public:
     int getBestPlacement(Tile grid[]);
 
-private:
-    int evaluateBoard(Tile grid[]);
+	Move getBestMove(Tile grid[], pieces* aiPieces[]);
 
+private:
+	const int MAX_DEPTH = 3;
+    const int PLAYER = 1;
+    const int AI_PLAYER = 2;
+
+    int evaluateBoard(Tile grid[]);
 
     int checkAllLines(Tile grid[]);
 
     int scoreLine(int aiCount, int playerCount, int emptyCount);
 
     int evaluateLine(Tile grid[], int indices[5]);
+
+    std::vector<int> getValidMoves(Tile grid[], int pieceIndex, int currentPos, int pieceType);
+
+	int minimax(Tile grid[], int depth, bool isMaximizing);
+
+    // Simulate a move on a copy of the grid
+    void makeMove(Tile gridCopy[], int from, int to, int player);
+    void undoMove(Tile gridCopy[], int from, int to);
 };

@@ -2,6 +2,13 @@
 #include "Tile.h"
 #include <iostream>
 
+enum PieceType
+{
+    DONKEY,
+    SNAKE,
+    FROG
+};
+
 class pieces
 {
 public:
@@ -11,8 +18,9 @@ public:
     bool placed = false;
     bool selected = false;
 	bool aiControlled = false;
+	PieceType type;
 
-    virtual void setUp(sf::Texture& texture, sf::Vector2f position, bool ai);
+    virtual void setUp(sf::Texture& texture, sf::Vector2f position, PieceType t_type, bool ai);
 
     virtual void place(sf::Vector2f position);
 
@@ -23,6 +31,8 @@ public:
     virtual void move(sf::Vector2f t_position);
 
     virtual int getCurrentTileIndex(Tile grid[]);
+
+    virtual PieceType getPieceType();
 };
 
 class Donkey : public pieces

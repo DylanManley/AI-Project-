@@ -1,7 +1,8 @@
 #include "Pieces.h"
 
-void pieces::setUp(sf::Texture &texture, sf::Vector2f position, bool ai)
+void pieces::setUp(sf::Texture &texture, sf::Vector2f position, PieceType t_type, bool ai)
 {
+    type = t_type;
 	aiControlled = ai;
 	pos = position;
 	sprite = new sf::Sprite{ texture };
@@ -72,6 +73,11 @@ int pieces::getCurrentTileIndex(Tile grid[])
         }
     }
     return -1; // Not found
+}
+
+PieceType pieces::getPieceType()
+{
+    return type;
 }
 
 void Donkey::showMoves(Tile grid[], int gridPos)

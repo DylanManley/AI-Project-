@@ -4,7 +4,7 @@
 int MiniMax::getBestPlacement(Tile grid[])
 {
     int bestScore = -999999;
-    int bestMove = -1;
+    int bestPlacement = -1;
 
     // Try each empty position
     for (int i = 0; i < 25; i++)
@@ -25,8 +25,46 @@ int MiniMax::getBestPlacement(Tile grid[])
             if (score > bestScore)
             {
                 bestScore = score;
-                bestMove = i;
+                bestPlacement = i;
             }
+        }
+    }
+
+    return bestPlacement;
+}
+
+Move MiniMax::getBestMove(Tile grid[], pieces* aiPieces[])
+{
+    Move bestMove = { -1, -1, -1, -9999 };
+    
+    for (int i = 0; i < 5; i++) // each ai piece
+    {
+		int pieceType = aiPieces[i]->getPieceType(); // 0 = Donkey, 1 = Snake, 2 = Frog
+		int currentPos = aiPieces[i]->getCurrentTileIndex(grid);
+
+		std::vector<int> possibleMoves = getValidMoves(grid, i, currentPos, pieceType);
+
+        for (int targetPos : possibleMoves)
+        {
+			grid[currentPos].setOccupied(false);
+			grid[currentPos].setOwner(0);
+			grid[targetPos].setOccupied(true);
+            grid[targetPos].setOwner(AI_PLAYER); // AI
+
+            int score = minimax(grid, MAX_DEPTH, false);
+
+			grid[currentPos].setOccupied(true);
+            grid[currentPos].setOwner(AI_PLAYER);
+            grid[targetPos].setOccupied(false);
+            grid[targetPos].setOwner(0);
+           
+            if (score > bestMove.score) // If this move is better
+            {
+                bestMove.pieceIndex = i;
+                bestMove.fromTile = currentPos;
+                bestMove.toTile = targetPos;
+				bestMove.score = score;
+			}
         }
     }
 
@@ -165,4 +203,114 @@ int MiniMax::scoreLine(int aiCount, int playerCount, int emptyCount)
     }
 
     return 0;
+}
+
+std::vector<int> MiniMax::getValidMoves(Tile grid[], int pieceIndex, int currentPos, int pieceType)
+{
+    std::vector<int> validMoves;
+
+    // Based on piece type, check valid moves
+    // 0 = Donkey (cardinal only), 1 = Snake (all 8 directions), 2 = Frog (all 8 + jump)
+
+    int moves[8] = { -1, 1, -5, 5, -6, -4, 4, 6 };
+    int numMoves = (pieceType == 0) ? 4 : 8; // Donkey only uses first 4
+
+    for (int i = 0; i < numMoves; i++)
+    {
+        int targetPos = currentPos + moves[i];
+
+        // Boundary checks
+        if (targetPos < 0 || targetPos >= 25)
+            continue;
+        if (abs(moves[i]) == 1 && targetPos / 5 != currentPos / 5)
+            continue; // Horizontal move crossed row boundary
+
+        if (!grid[targetPos].isOccupied())
+        {
+            validMoves.push_back(targetPos);
+        }
+    }
+
+    return validMoves;
+}
+
+int MiniMax::minimax(Tile grid[], int depth, bool isMaximizing)
+{
+    if (depth == 0)
+    {
+        return evaluateBoard(grid);
+	}
+
+    if (isMaximizing)
+    {
+        int maxEvaluation = -99999;
+
+        // Try all possible AI moves
+        for (int i = 0; i < 25; i++)
+        {
+            if (grid[i].isOccupied() && grid[i].getOwner() == AI_PLAYER)
+            {
+                // Simplified: try moving to adjacent tiles
+                std::vector<int> moves = { i - 1, i + 1, i - 5, i + 5, i - 6, i - 4, i + 4, i + 6 };
+
+                for (int targetPos : moves)
+                {
+                    if (targetPos >= 0 && targetPos < 25 && !grid[targetPos].isOccupied())
+                    {
+                        // Make move
+                        makeMove(grid, i, targetPos, AI_PLAYER);
+
+                        int eval = minimax(grid, depth - 1, false);
+
+                        // Undo move
+                        undoMove(grid, i, targetPos);
+
+                        maxEvaluation = std::max(maxEvaluation, eval);
+                    }
+                }
+            }
+        }
+        return maxEvaluation;
+    }
+    else
+    {
+        int minEval = 99999;
+
+        // Try all possible player moves
+        for (int i = 0; i < 25; i++)
+        {
+            if (grid[i].isOccupied() && grid[i].getOwner() == PLAYER)
+            {
+                std::vector<int> moves = { i - 1, i + 1, i - 5, i + 5, i - 6, i - 4, i + 4, i + 6 };
+
+                for (int targetPos : moves)
+                {
+                    if (targetPos >= 0 && targetPos < 25 && !grid[targetPos].isOccupied())
+                    {
+                        makeMove(grid, i, targetPos, PLAYER);
+
+                        int eval = minimax(grid, depth - 1, true);
+
+                        undoMove(grid, i, targetPos);
+
+                        minEval = std::min(minEval, eval);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void MiniMax::makeMove(Tile gridCopy[], int from, int to, int player)
+{
+    gridCopy[from].setOccupied(false);
+    gridCopy[to].setOccupied(true);
+    gridCopy[to].setOwner(player);
+}
+
+void MiniMax::undoMove(Tile gridCopy[], int from, int to)
+{
+    gridCopy[to].setOccupied(false);
+    gridCopy[from].setOccupied(true);
+    gridCopy[from].setOwner(2); // Restore AI ownership
 }

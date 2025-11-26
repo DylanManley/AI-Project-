@@ -318,30 +318,26 @@ void Game::update(sf::Time t_deltaTime)
 		}
 		else // AI Turn
 		{
-			int bestTile = ai.getBestPlacement(grid);
+			pieces* aiPieces[5] = { &aiSnake, &aiFrog, &aiDonkey[0], &aiDonkey[1], &aiDonkey[2] };
 
-			if (bestTile != 1)
+			Move bestMove = ai.getBestMove(grid, aiPieces);
+
+			if (bestMove.toTile != 1)
 			{
-				int pieceChoice = rand() % 3 + 1;
-				int chosenDonkey = rand() % 3;
+				selectedPiece = aiPieces[bestMove.pieceIndex];
 
-				switch (pieceChoice)
-				{
-				case 1:
-					selectedPiece = &aiSnake;
-					break;
-				case 2:
-					selectedPiece = &aiFrog;
-					break;
-				case 3:
-					selectedPiece = &aiDonkey[chosenDonkey];
-					break;
-				default:
-					break;
-				}
+				grid[bestMove.fromTile].setOccupied(false);
+				grid[bestMove.fromTile].setOwner(0);
+				grid[bestMove.toTile].setOccupied(true);
+				grid[bestMove.toTile].setOwner(2); // AI is player 2
+
+				selectedPiece->move(grid[bestMove.toTile].getPosition());
+				selectedPiece->shape.setFillColor(sf::Color::Red);
+				selectedPiece = nullptr;
+				playerTurn = true;
 			}
 
-			if (selectedPiece != nullptr)
+			/*if (selectedPiece != nullptr)
 			{
 				int currentTileIndex = selectedPiece->getCurrentTileIndex(grid);
 				showPossibleMoves();
@@ -360,7 +356,7 @@ void Game::update(sf::Time t_deltaTime)
 						break;
 					}
 				}
-			}
+			}*/
 		}
 	}
 }
@@ -466,22 +462,22 @@ void Game::setupSprites()
 	xPos = 210;
 	yPos = 500;
 
-	snake.setUp(snakeTex, sf::Vector2f{ 10, yPos }, false);
-	frog.setUp(frogTex, sf::Vector2f{ 110, yPos }, false);
+	snake.setUp(snakeTex, sf::Vector2f{ 10, yPos }, PieceType::SNAKE, false);
+	frog.setUp(frogTex, sf::Vector2f{ 110, yPos }, PieceType::FROG, false);
 	for (int i = 0; i < 3; i++)
 	{
-		donkey[i].setUp(donkeyTex, sf::Vector2f{xPos, yPos}, false);
+		donkey[i].setUp(donkeyTex, sf::Vector2f{xPos, yPos}, PieceType::DONKEY, false);
 		xPos += 100;
 	}
 
 	xPos = -10000;
 	yPos = -10000;
 
-	aiSnake.setUp(snakeTex, sf::Vector2f{ 10, yPos }, true);
-	aiFrog.setUp(frogTex, sf::Vector2f{ 110, yPos }, true);
+	aiSnake.setUp(snakeTex, sf::Vector2f{ 10, yPos }, PieceType::SNAKE, true);
+	aiFrog.setUp(frogTex, sf::Vector2f{ 110, yPos }, PieceType::FROG, true);
 	for (int i = 0; i < 3; i++)
 	{
-		aiDonkey[i].setUp(donkeyTex, sf::Vector2f{ xPos, yPos }, true);
+		aiDonkey[i].setUp(donkeyTex, sf::Vector2f{ xPos, yPos }, PieceType::DONKEY, true);
 		xPos += 100;
 	}
 
