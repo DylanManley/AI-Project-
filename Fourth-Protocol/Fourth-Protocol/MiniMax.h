@@ -17,7 +17,7 @@ public:
 	Move getBestMove(Tile grid[], pieces* aiPieces[]);
 
 private:
-	const int MAX_DEPTH = 3;
+	const int MAX_DEPTH = 0;
     const int PLAYER = 1;
     const int AI_PLAYER = 2;
 

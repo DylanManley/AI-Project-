@@ -274,7 +274,7 @@ int MiniMax::minimax(Tile grid[], int depth, bool isMaximizing)
     }
     else
     {
-        int minEval = 99999;
+        int minEvaluation = 99999;
 
         // Try all possible player moves
         for (int i = 0; i < 25; i++)
@@ -293,11 +293,12 @@ int MiniMax::minimax(Tile grid[], int depth, bool isMaximizing)
 
                         undoMove(grid, i, targetPos);
 
-                        minEval = std::min(minEval, eval);
+                        minEvaluation = std::min(minEvaluation, eval);
                     }
                 }
             }
         }
+        return minEvaluation;
     }
 }
 
