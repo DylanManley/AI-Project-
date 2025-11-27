@@ -78,6 +78,7 @@ int MiniMax::checkAllLines(Tile grid[])
 {
     int totalScore = 0;
 
+    std::cout << "Checking Rows" << std::endl;
     // Horizontal lines
     for (int row = 0; row < 5; row++)
     {
@@ -91,6 +92,7 @@ int MiniMax::checkAllLines(Tile grid[])
         totalScore += evaluateLine(grid, indices);
     }
 
+    std::cout << "Checking Columns" << std::endl;
     // Vertical lines
     for (int col = 0; col < 5; col++)
     {
@@ -104,6 +106,7 @@ int MiniMax::checkAllLines(Tile grid[])
         totalScore += evaluateLine(grid, indices);
     }
 
+    std::cout << "Checking Diagonals" << std::endl;
     // Diagonal (top-left to bottom-right)
     int diagStarts[][2] = { {0, 0}, {0, 1}, {1, 0} };
     for (int i = 0; i < 3; i++)
@@ -149,6 +152,7 @@ int MiniMax::evaluateLine(Tile grid[], int indices[5])
 
     for (int i = 0; i < 5; i++)
     {
+        std::cout << "Checking tile index: " << indices[i] << " owned by: " << grid[indices[i]].getOwner() << std::endl << std::endl;
         int owner = grid[indices[i]].getOwner();
         if (owner == 2)
             aiCount++;
