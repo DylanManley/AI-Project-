@@ -17,7 +17,7 @@ public:
 	Move getBestMove(Tile grid[], pieces* aiPieces[]);
 
 private:
-	const int MAX_DEPTH = 0;
+	const int MAX_DEPTH = 2;
     const int PLAYER = 1;
     const int AI_PLAYER = 2;
 
@@ -29,11 +29,10 @@ private:
 
     int evaluateLine(Tile grid[], int indices[5]);
 
-    std::vector<int> getValidMoves(Tile grid[], int pieceIndex, int currentPos, int pieceType);
+    std::vector<int> getValidMovesForPiece(Tile grid[], int currentPos, int pieceType);
 
 	int minimax(Tile grid[], int depth, bool isMaximizing);
 
-    // Simulate a move on a copy of the grid
     void makeMove(Tile gridCopy[], int from, int to, int player);
-    void undoMove(Tile gridCopy[], int from, int to);
+    void undoMove(Tile gridCopy[], int from, int to, int originalOwner);
 };
