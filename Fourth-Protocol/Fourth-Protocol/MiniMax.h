@@ -31,7 +31,7 @@ private:
 
     std::vector<int> getValidMovesForPiece(Tile grid[], int currentPos, int pieceType);
 
-	int minimax(Tile grid[], int depth, bool isMaximizing);
+	int minimax(Tile grid[], int depth, int alpha, int beta, bool isMaximizing);
 
     void makeMove(Tile gridCopy[], int from, int to, int player);
     void undoMove(Tile gridCopy[], int from, int to, int originalOwner);
