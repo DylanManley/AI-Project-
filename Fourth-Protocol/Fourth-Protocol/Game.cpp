@@ -413,6 +413,15 @@ void Game::showPossibleMoves()
 
 }
 
+
+void Game::checkForWin()
+{
+	// Check rows, columns, and diagonals for a win condition
+	// If a player has won, set gameState to GameState::ENDED
+
+
+}
+
 /// <summary>
 /// load the font and setup the text message for screen
 /// </summary>

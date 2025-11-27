@@ -64,6 +64,8 @@ Move MiniMax::getBestMove(Tile grid[], pieces* aiPieces[])
         }
     }
 
+    std::cout << "selected piece: " << bestMove.pieceIndex << std::endl;
+
     return bestMove;
 }
 
@@ -161,6 +163,11 @@ int MiniMax::evaluateLine(Tile grid[], int indices[5])
 
 int MiniMax::scoreLine(int aiCount, int playerCount, int emptyCount)
 {
+    if (aiCount > 3 || playerCount > 3) // error somewhere with piece count
+    {
+        std::cout << "game over";
+    }
+
     if (aiCount > 0 && playerCount > 0)
         return 0;
 
@@ -204,6 +211,7 @@ std::vector<int> MiniMax::getValidMovesForPiece(Tile grid[], int gridPos, int pi
     {
         if (grid[i].isPossibleMove())
             validMoves.push_back(i);
+        grid[i].setPossibleMove(false);
     }
 
     delete tempPiece;
