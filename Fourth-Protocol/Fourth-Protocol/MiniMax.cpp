@@ -247,6 +247,7 @@ int MiniMax::minimax(Tile grid[], int depth, bool isMaximizing)
         {
             if (grid[i].isOccupied() && grid[i].getOwner() == PLAYER)
             {
+
                 std::vector<int> moves = getValidMovesForPiece(grid, i, SNAKE);
 
                 for (int targetPos : moves)
