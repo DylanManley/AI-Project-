@@ -47,7 +47,7 @@ Move MiniMax::getBestMove(Tile grid[], pieces* aiPieces[])
             grid[targetPos].setOccupied(true);
             grid[targetPos].setOwner(AI_PLAYER);
 
-            int score = minimax(grid, MAX_DEPTH, false);
+            int score = minimax(grid, MAX_DEPTH, -99999, 99999, false);
 
             grid[currentPos].setOccupied(true);
             grid[currentPos].setOwner(AI_PLAYER);
@@ -218,7 +218,7 @@ std::vector<int> MiniMax::getValidMovesForPiece(Tile grid[], int gridPos, int pi
     return validMoves;
 }
 
-int MiniMax::minimax(Tile grid[], int depth, bool isMaximizing)
+int MiniMax::minimax(Tile grid[], int depth, int alpha, int beta, bool isMaximizing)
 {
     if (depth == 0)
     {
@@ -238,10 +238,14 @@ int MiniMax::minimax(Tile grid[], int depth, bool isMaximizing)
                 for (int targetPos : moves)
                 {
                     makeMove(grid, i, targetPos, AI_PLAYER);
-                    int eval = minimax(grid, depth - 1, false);
+                    int eval = minimax(grid, depth - 1,alpha, beta, false);
                     undoMove(grid, i, targetPos, AI_PLAYER);
 
                     maxEvaluation = std::max(maxEvaluation, eval);
+                    alpha = std::max(alpha, eval);
+
+                    if (beta <= alpha)
+                        break;
                 }
             }
         }
@@ -261,10 +265,12 @@ int MiniMax::minimax(Tile grid[], int depth, bool isMaximizing)
                 for (int targetPos : moves)
                 {
                     makeMove(grid, i, targetPos, PLAYER);
-                    int eval = minimax(grid, depth - 1, true);
+                    int eval = minimax(grid, depth - 1, alpha, beta, true);
                     undoMove(grid, i, targetPos, PLAYER);
-
                     minEvaluation = std::min(minEvaluation, eval);
+                    beta = std::min(beta, eval);
+                    if (beta <= alpha)
+                        break;
                 }
             }
         }
