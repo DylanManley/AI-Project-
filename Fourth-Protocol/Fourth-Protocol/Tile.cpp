@@ -2,6 +2,11 @@
 
 Tile::Tile()
 {
+	if (!font.openFromFile("ASSETS\\FONTS\\Jersey20-Regular.ttf"))
+	{
+		std::cout << "problem loading arial black font" << std::endl;
+	}
+	ownerText.setFont(font);
 }
 
 Tile::~Tile()
@@ -10,6 +15,7 @@ Tile::~Tile()
 
 void Tile::update()
 {
+	ownerText.setString(std::to_string(owner));
 }
 
 void Tile::render(sf::RenderWindow& t_window)
@@ -23,6 +29,9 @@ void Tile::render(sf::RenderWindow& t_window)
 		shape.setFillColor(sf::Color::White);
 	}
 	t_window.draw(shape);
+	
+	t_window.draw(ownerText);
+
 }
 
 void Tile::setup()
@@ -33,11 +42,20 @@ void Tile::setup()
 	shape.setOutlineThickness(5);
 
 	occupied = false;
+	possibleMove = false;
+	owner = 0;
+	
+	ownerText.setString(std::to_string(owner));
+	ownerText.setCharacterSize(30U);
+	ownerText.setOutlineColor(sf::Color::Black);
+	ownerText.setFillColor(sf::Color::White);
+	ownerText.setOutlineThickness(2.0f);
 }
 
 void Tile::setOwner(int t_owner)
 {
 	owner = t_owner;
+	ownerText.setString(std::to_string(owner));
 }
 
 int Tile::getOwner()
@@ -63,6 +81,7 @@ bool Tile::isPossibleMove()
 void Tile::setPosition(sf::Vector2f t_position)
 {
 	shape.setPosition(t_position);
+	ownerText.setPosition(t_position);
 }
 
 void Tile::setColour(sf::Color t_colour)

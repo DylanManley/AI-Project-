@@ -182,6 +182,7 @@ void Game::update(sf::Time t_deltaTime)
 							selectedPiece = nullptr;
 							playerTurn = false;
 							placedPieces++;
+							checkForWin();
 							return;
 						}
 					}
@@ -236,16 +237,22 @@ void Game::update(sf::Time t_deltaTime)
 					selectedPiece = nullptr;
 					playerTurn = true;
 					placedPieces++;
+					checkForWin();
 					return;
 				}
 			}
+		}
+
+		for (int i = 0; i < 25; i++)
+		{
+			grid[i].update();
 		}
 
 		if (placedPieces >= 10)
 		{
 			gameState = GameState::PLAYING;
 		}
-
+		
 	}
 	else if (gameState == GameState::PLAYING) // Playing Game
 	{
@@ -310,6 +317,7 @@ void Game::update(sf::Time t_deltaTime)
 							selectedPiece = nullptr;
 							clearMoves();
 							playerTurn = false;
+							checkForWin();
 							break;
 						}
 					}
@@ -334,6 +342,7 @@ void Game::update(sf::Time t_deltaTime)
 				selectedPiece->move(grid[bestMove.toTile].getPosition());
 				selectedPiece->shape.setFillColor(sf::Color::Red);
 				selectedPiece = nullptr;
+				checkForWin();
 				playerTurn = true;
 			}
 
@@ -418,7 +427,199 @@ void Game::checkForWin()
 {
 	// Check rows, columns, and diagonals for a win condition
 	// If a player has won, set gameState to GameState::ENDED
+	
+	int aiCount = 0;
+	int playerCount = 0;
+	int emptyCount = 0;
 
+	//std::cout << "Checking Rows" << std::endl;
+	// Horizontal lines
+	for (int row = 0; row < 5; row++)
+	{
+		aiCount = 0;
+		playerCount = 0;
+		emptyCount = 0;
+
+		int indices[5] = {
+			row * 5 + 0,
+			row * 5 + 1,
+			row * 5 + 2,
+			row * 5 + 3,
+			row * 5 + 4
+		};
+		for (int i = 0; i < 5; i++)
+		{
+			if (indices[i] < 25) // check if index is in bounds (diagonals mainly)
+			{
+				//std::cout << "Checking tile index: " << indices[i] << " owned by: " << grid[indices[i]].getOwner() << std::endl << std::endl;
+				int owner = grid[indices[i]].getOwner();
+				if (owner == 2)
+					aiCount++;
+				else if (owner == 1)
+					playerCount++;
+				else
+					emptyCount++;
+
+				if (aiCount > 3 || playerCount > 3)
+				{
+					if (aiCount > 3)
+					{
+						std::cout << "AI Win detected! (Row)" << std::endl;
+					}
+					else if (playerCount > 3)
+					{
+						std::cout << "Player Win detected! (Row)" << std::endl;
+					}
+					gameState = GameState::ENDED;
+					return;
+				}
+			}
+		}
+	}
+
+	
+
+	//std::cout << "Checking Columns" << std::endl;
+	// Vertical lines
+	for (int col = 0; col < 5; col++)
+	{
+		aiCount = 0;
+		playerCount = 0;
+		emptyCount = 0;
+
+		int indices[5] = {
+			0 * 5 + col,
+			1 * 5 + col,
+			2 * 5 + col,
+			3 * 5 + col,
+			4 * 5 + col
+		};
+		for (int i = 0; i < 5; i++)
+		{
+			if (indices[i] < 25) // check if index is in bounds (diagonals mainly)
+			{
+				//std::cout << "Checking tile index: " << indices[i] << " owned by: " << grid[indices[i]].getOwner() << std::endl << std::endl;
+				int owner = grid[indices[i]].getOwner();
+				if (owner == 2)
+					aiCount++;
+				else if (owner == 1)
+					playerCount++;
+				else
+					emptyCount++;
+
+				if (aiCount > 3 || playerCount > 3)
+				{
+					if (aiCount > 3)
+					{
+						std::cout << "AI Win detected! (Column)" << std::endl;
+					}
+					else if (playerCount > 3)
+					{
+						std::cout << "Player Win detected! (Column)" << std::endl;
+					}
+					gameState = GameState::ENDED;
+					return;
+				}
+			}
+		}
+	}
+
+	//std::cout << "Checking Diagonals" << std::endl;
+	// Diagonal (top-left to bottom-right)
+	int diagStarts[][2] = { {0, 0}, {0, 1}, {1, 0} };
+	for (int i = 0; i < 3; i++)
+	{
+		aiCount = 0;
+		playerCount = 0;
+		emptyCount = 0;
+
+		int startRow = diagStarts[i][0];
+		int startCol = diagStarts[i][1];
+
+		int indices[5] = {
+			(startRow + 0) * 5 + (startCol + 0),
+			(startRow + 1) * 5 + (startCol + 1),
+			(startRow + 2) * 5 + (startCol + 2),
+			(startRow + 3) * 5 + (startCol + 3),
+			(startRow + 4) * 5 + (startCol + 4)
+		};
+		for (int i = 0; i < 5; i++)
+		{
+			if (indices[i] < 25) // check if index is in bounds (diagonals mainly)
+			{
+				//std::cout << "Checking tile index: " << indices[i] << " owned by: " << grid[indices[i]].getOwner() << std::endl << std::endl;
+				int owner = grid[indices[i]].getOwner();
+				if (owner == 2)
+					aiCount++;
+				else if (owner == 1)
+					playerCount++;
+				else
+					emptyCount++;
+
+				if (aiCount > 3 || playerCount > 3)
+				{
+					if (aiCount > 3)
+					{
+						std::cout << "AI Win detected! (Diag)" << std::endl;
+					}
+					else if (playerCount > 3)
+					{
+						std::cout << "Player Win detected! (Diag)" << std::endl;
+					}
+					gameState = GameState::ENDED;
+					return;
+				}
+			}
+		}
+	}
+
+	// Anti-diagonal (top-right to bottom-left)
+	int antiDiagStarts[][2] = { {0, 4}, {0, 3}, {1, 4} };
+	for (int i = 0; i < 3; i++)
+	{
+		aiCount = 0;
+		playerCount = 0;
+		emptyCount = 0;
+
+		int startRow = antiDiagStarts[i][0];
+		int startCol = antiDiagStarts[i][1];
+
+		int indices[5] = {
+			(startRow + 0) * 5 + (startCol - 0),
+			(startRow + 1) * 5 + (startCol - 1),
+			(startRow + 2) * 5 + (startCol - 2),
+			(startRow + 3) * 5 + (startCol - 3),
+			(startRow + 4) * 5 + (startCol - 4)
+		};
+		for (int i = 0; i < 5; i++)
+		{
+			if (indices[i] < 25) // check if index is in bounds (diagonals mainly)
+			{
+				//std::cout << "Checking tile index: " << indices[i] << " owned by: " << grid[indices[i]].getOwner() << std::endl << std::endl;
+				int owner = grid[indices[i]].getOwner();
+				if (owner == 2)
+					aiCount++;
+				else if (owner == 1)
+					playerCount++;
+				else
+					emptyCount++;
+
+				if (aiCount > 3 || playerCount > 3)
+				{
+					if (aiCount > 3)
+					{
+						std::cout << "AI Win detected! (Anti-Diag)" << std::endl;
+					}
+					else if (playerCount > 3)
+					{
+						std::cout << "Player Win detected! (Anti-Diag)" << std::endl;
+					}
+					gameState = GameState::ENDED;
+					return;
+				}
+			}
+		}
+	}
 
 }
 
@@ -490,7 +691,7 @@ void Game::setupSprites()
 		xPos += 100;
 	}
 
-	std::cout << "sprites working";
+	std::cout << "sprites working" << std::endl;
 }
 
 /// <summary>

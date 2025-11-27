@@ -78,7 +78,7 @@ int MiniMax::checkAllLines(Tile grid[])
 {
     int totalScore = 0;
 
-    std::cout << "Checking Rows" << std::endl;
+    //std::cout << "Checking Rows" << std::endl;
     // Horizontal lines
     for (int row = 0; row < 5; row++)
     {
@@ -92,7 +92,7 @@ int MiniMax::checkAllLines(Tile grid[])
         totalScore += evaluateLine(grid, indices);
     }
 
-    std::cout << "Checking Columns" << std::endl;
+    //std::cout << "Checking Columns" << std::endl;
     // Vertical lines
     for (int col = 0; col < 5; col++)
     {
@@ -106,7 +106,7 @@ int MiniMax::checkAllLines(Tile grid[])
         totalScore += evaluateLine(grid, indices);
     }
 
-    std::cout << "Checking Diagonals" << std::endl;
+    //std::cout << "Checking Diagonals" << std::endl;
     // Diagonal (top-left to bottom-right)
     int diagStarts[][2] = { {0, 0}, {0, 1}, {1, 0} };
     for (int i = 0; i < 3; i++)
@@ -150,28 +150,27 @@ int MiniMax::evaluateLine(Tile grid[], int indices[5])
     int playerCount = 0;
     int emptyCount = 0;
 
+	int indexList[5] = { indices[0], indices[1], indices[2], indices[3], indices[4] };
+
     for (int i = 0; i < 5; i++)
     {
-        std::cout << "Checking tile index: " << indices[i] << " owned by: " << grid[indices[i]].getOwner() << std::endl << std::endl;
-        int owner = grid[indices[i]].getOwner();
-        if (owner == 2)
-            aiCount++;
-        else if (owner == 1)
-            playerCount++;
-        else
-            emptyCount++;
+        if (indices[i] < 25) // check if index is in bounds (diagonals mainly)
+        {
+            //std::cout << "Checking tile index: " << indices[i] << " owned by: " << grid[indices[i]].getOwner() << std::endl << std::endl;
+            int owner = grid[indices[i]].getOwner();
+            if (owner == 2)
+                aiCount++;
+            else if (owner == 1)
+                playerCount++;
+            else
+                emptyCount++;
+        }
     }
-
     return scoreLine(aiCount, playerCount, emptyCount);
 }
 
 int MiniMax::scoreLine(int aiCount, int playerCount, int emptyCount)
 {
-    if (aiCount > 3 || playerCount > 3) // error somewhere with piece count
-    {
-        std::cout << "game over";
-    }
-
     if (aiCount > 0 && playerCount > 0)
         return 0;
 

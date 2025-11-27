@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 class Tile
 {
@@ -30,6 +31,8 @@ public:
 
 private:
 	sf::RectangleShape shape;
+	sf::Font font;
+	sf::Text ownerText{ font };
 
 	bool occupied = false;
 	bool possibleMove = false;
