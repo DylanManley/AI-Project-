@@ -22,7 +22,8 @@
 enum class GameState
 {
 	PLACING,
-	PLAYING
+	PLAYING,
+	ENDED
 };
 
 class Game
@@ -41,6 +42,7 @@ private:
 	void render();
 
 	void showPossibleMoves();
+	void checkForWin();
 	
 	void setupTexts();
 	void setupSprites();
