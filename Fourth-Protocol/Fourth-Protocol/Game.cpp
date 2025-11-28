@@ -628,11 +628,21 @@ void Game::checkForWin()
 				//std::cout << "Checking tile index: " << indices[i] << " owned by: " << grid[indices[i]].getOwner() << std::endl << std::endl;
 				int owner = grid[indices[i]].getOwner();
 				if (owner == 2)
+				{
 					aiCount++;
+					playerCount = 0;
+				}
 				else if (owner == 1)
+				{
 					playerCount++;
+					aiCount = 0;
+				}
 				else
+				{
 					emptyCount++;
+					playerCount = 0;
+					aiCount = 0;
+				}
 
 				if (aiCount > 3 || playerCount > 3)
 				{
