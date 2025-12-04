@@ -36,7 +36,22 @@ int pieces::SetMoves(Tile grid[], int index, int jumpOffset)
         else if (jumpOffset != 0)
         {
             int jumpIndex = index + jumpOffset;
-            if (jumpIndex >= 0 && jumpIndex < 25 && !grid[jumpIndex].isOccupied())
+
+			int fromRow = index / 5;
+			int fromCol = index % 5;
+			int toRow = jumpIndex / 5;
+			int toCol = jumpIndex % 5;
+
+			int rowDiff = toRow - fromRow;
+			int colDiff = toCol - fromCol;
+
+            if (abs(colDiff) > 2)
+            {
+                return 0;
+            }
+
+            if (jumpIndex >= 0 && jumpIndex < 25 
+                && !grid[jumpIndex].isOccupied() )
             {
                 grid[jumpIndex].setPossibleMove(true);
                 grid[jumpIndex].setColour(sf::Color(0, 0, 255, 70));
