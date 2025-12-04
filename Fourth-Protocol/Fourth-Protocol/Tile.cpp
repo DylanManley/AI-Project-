@@ -1,3 +1,9 @@
+/**
+ * @file Tile.cpp
+ * @brief Tile class implementation
+ * @author Dylan Manley & Jakub Stepien
+ */
+
 #include "Tile.h"
 
 Tile::Tile()
@@ -30,7 +36,7 @@ void Tile::render(sf::RenderWindow& t_window)
 	}
 	t_window.draw(shape);
 	
-	t_window.draw(ownerText);
+	//t_window.draw(ownerText);
 
 }
 

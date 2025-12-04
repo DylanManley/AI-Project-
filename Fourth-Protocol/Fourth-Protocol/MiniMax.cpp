@@ -1,3 +1,9 @@
+/**
+ * @file MiniMax.cpp
+ * @brief Minimax algorithm implementation
+ * @author Dylan Manley & Jakub Stepien
+ */
+
 #include "MiniMax.h"
 #include <iostream>
 
@@ -47,7 +53,7 @@ Move MiniMax::getBestMove(Tile grid[], pieces* aiPieces[])
             grid[targetPos].setOccupied(true);
             grid[targetPos].setOwner(AI_PLAYER);
 
-            int score = minimax(grid, MAX_DEPTH, -99999, 99999, false);
+            int score = minimax(grid, maxDepth, -99999, 99999, false);
 
             grid[currentPos].setOccupied(true);
             grid[currentPos].setOwner(AI_PLAYER);
@@ -78,7 +84,6 @@ int MiniMax::checkAllLines(Tile grid[])
 {
     int totalScore = 0;
 
-    //std::cout << "Checking Rows" << std::endl;
     // Horizontal lines
     for (int row = 0; row < 5; row++)
     {
@@ -92,7 +97,6 @@ int MiniMax::checkAllLines(Tile grid[])
         totalScore += evaluateLine(grid, indices);
     }
 
-    //std::cout << "Checking Columns" << std::endl;
     // Vertical lines
     for (int col = 0; col < 5; col++)
     {
@@ -106,7 +110,6 @@ int MiniMax::checkAllLines(Tile grid[])
         totalScore += evaluateLine(grid, indices);
     }
 
-    //std::cout << "Checking Diagonals" << std::endl;
     // Diagonal (top-left to bottom-right)
     int diagStarts[][2] = { {0, 0}, {0, 1}, {1, 0} };
     for (int i = 0; i < 3; i++)
@@ -156,7 +159,6 @@ int MiniMax::evaluateLine(Tile grid[], int indices[5])
     {
         if (indices[i] < 25) // check if index is in bounds (diagonals mainly)
         {
-            //std::cout << "Checking tile index: " << indices[i] << " owned by: " << grid[indices[i]].getOwner() << std::endl << std::endl;
             int owner = grid[indices[i]].getOwner();
             if (owner == 2)
                 aiCount++;
@@ -221,6 +223,9 @@ std::vector<int> MiniMax::getValidMovesForPiece(Tile grid[], int gridPos, int pi
     return validMoves;
 }
 
+/**
+ * @brief Recursively search game tree using minimax with pruning
+ */
 int MiniMax::minimax(Tile grid[], int depth, int alpha, int beta, bool isMaximizing)
 {
     if (depth == 0)
@@ -295,4 +300,14 @@ void MiniMax::undoMove(Tile gridCopy[], int from, int to, int originalOwner)
     gridCopy[to].setOwner(0);
     gridCopy[from].setOccupied(true);
     gridCopy[from].setOwner(originalOwner);
+}
+
+void MiniMax::setDepth(int depth)
+{
+    maxDepth = depth;
+}
+
+int MiniMax::getDepth()
+{
+    return maxDepth;
 }

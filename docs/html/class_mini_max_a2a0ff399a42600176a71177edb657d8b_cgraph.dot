@@ -1,0 +1,13 @@
+digraph "MiniMax::makeMove"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="MiniMax::makeMove",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Apply move to board."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="Tile::setOccupied",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_tile.html#a1b3f5e4093ea60b4c83350fd8089d4c4",tooltip="Set occupied state."];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="Tile::setOwner",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_tile.html#a7ca5104d03fdc0bcf9b86c52e70c05dc",tooltip="Set tile owner."];
+}

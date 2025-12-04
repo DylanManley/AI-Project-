@@ -1,19 +1,15 @@
-/// <summary>
-/// author Dylan Manley
-/// you need to change the above line or lose marks
-/// </summary>
-
+/**
+ * @file Game.cpp
+ * @brief Game class implementation
+ * @author Dylan Manley & Jakub Stepien
+ */
 
 #include "Game.h"
 #include <iostream>
 
-/// <summary>
-/// default constructor
-/// setup the window properties
-/// load and setup the texts
-/// load and setup the images
-/// load and setup the sounds
-/// </summary>
+ /**
+  * @brief Constructor initializes window and loads resources
+  */
 Game::Game() :
 	m_window{ sf::VideoMode{ sf::Vector2u{500, 600}, 32U }, "The Fourth Protocol" },
 	m_DELETEexitGame{false} //when true game will exit
@@ -33,13 +29,9 @@ Game::~Game()
 }
 
 
-/// <summary>
-/// main game loop
-/// update 60 times per second,
-/// process update as often as possible and at least 60 times per second
-/// draw as often as possible but only updates are on time
-/// if updates run slow then don't render frames
-/// </summary>
+/**
+ * @brief Main loop running at 60 FPS with fixed timestep
+ */
 void Game::run()
 {	
 	sf::Clock clock;
@@ -93,6 +85,49 @@ void Game::processKeys(const std::optional<sf::Event> t_event)
 	if (sf::Keyboard::Key::Escape == newKeypress->code)
 	{
 		m_DELETEexitGame = true; 
+	}
+	if (playerTurn)
+	{
+		if (sf::Keyboard::Key::Num0 == newKeypress->code)
+		{
+			ai.setDepth(0);
+		}
+		else if (sf::Keyboard::Key::Num1 == newKeypress->code)
+		{
+			ai.setDepth(1);
+		}
+		else if (sf::Keyboard::Key::Num2 == newKeypress->code)
+		{
+			ai.setDepth(2);
+		}
+		else if (sf::Keyboard::Key::Num3 == newKeypress->code)
+		{
+			ai.setDepth(3);
+		}
+		else if (sf::Keyboard::Key::Num4 == newKeypress->code)
+		{
+			ai.setDepth(4);
+		}
+		else if (sf::Keyboard::Key::Num5 == newKeypress->code)
+		{
+			ai.setDepth(5);
+		}
+		else if (sf::Keyboard::Key::Num6 == newKeypress->code)
+		{
+			ai.setDepth(6);
+		}
+		else if (sf::Keyboard::Key::Num7 == newKeypress->code)
+		{
+			ai.setDepth(7);
+		}
+		else if (sf::Keyboard::Key::Num8 == newKeypress->code)
+		{
+			ai.setDepth(8);
+		}
+		else if (sf::Keyboard::Key::Num9 == newKeypress->code)
+		{
+			ai.setDepth(9);
+		}
 	}
 }
 
@@ -320,11 +355,6 @@ void Game::update(sf::Time t_deltaTime)
 							}
 						}
 					}
-					/*for (int i = 0; i < 25; i++)
-					{
-						std::cout << "Grid: " << i << "\tisPossibleMove: " << grid[i].isPossibleMove() << "\tisOccupied: " << grid[i].isOccupied() << std::endl;
-					}*/
-
 				}
 				else
 				{
@@ -370,27 +400,6 @@ void Game::update(sf::Time t_deltaTime)
 				checkForWin();
 				playerTurn = true;
 			}
-
-			/*if (selectedPiece != nullptr)
-			{
-				int currentTileIndex = selectedPiece->getCurrentTileIndex(grid);
-				showPossibleMoves();
-				for (int i = 0; i < GRID_SIZE; i++)
-				{
-					if (grid[i].isPossibleMove())
-					{
-						grid[currentTileIndex].setOccupied(false);
-						selectedPiece->move(grid[i].getPosition());
-						grid[i].setOccupied(true);
-						grid[i].setOwner(2);
-						selectedPiece->selected = false;
-						selectedPiece = nullptr;
-						clearMoves();
-						playerTurn = true;
-						break;
-					}
-				}
-			}*/
 		}
 	}
 }
@@ -429,18 +438,14 @@ void Game::render()
 		m_window.draw(*aiDonkey[i].sprite);
 	}
 
+	depthText.setString("AI Depth: " + std::to_string(ai.getDepth()) + "\nChange depth by pressing 1-0");
+	m_window.draw(depthText);
+
 	m_window.display();
 }
 
 int Game::showPossibleMoves()
 {
-	/*for (int i = 0; i < GRID_SIZE; i++)
-	{
-		if (grid[i].isHovered(boardPos))
-		{
-			selectedPiece->showMoves(grid, i);
-		}
-	}*/
 	int count = 0;
 
 	int currentTileIndex = selectedPiece->getCurrentTileIndex(grid);
@@ -449,7 +454,9 @@ int Game::showPossibleMoves()
 	return count;
 }
 
-
+/**
+ * @brief Check all lines for 4-in-a-row win condition
+ */
 void Game::checkForWin()
 {
 	// Check rows, columns, and diagonals for a win condition
@@ -459,7 +466,6 @@ void Game::checkForWin()
 	int playerCount = 0;
 	int emptyCount = 0;
 
-	//std::cout << "Checking Rows" << std::endl;
 	// Horizontal lines
 	for (int row = 0; row < 5; row++)
 	{
@@ -478,7 +484,6 @@ void Game::checkForWin()
 		{
 			if (indices[i] < 25) // check if index is in bounds (diagonals mainly)
 			{
-				//std::cout << "Checking tile index: " << indices[i] << " owned by: " << grid[indices[i]].getOwner() << std::endl << std::endl;
 				int owner = grid[indices[i]].getOwner();
 				if (owner == 2)
 				{
@@ -514,9 +519,6 @@ void Game::checkForWin()
 		}
 	}
 
-	
-
-	//std::cout << "Checking Columns" << std::endl;
 	// Vertical lines
 	for (int col = 0; col < 5; col++)
 	{
@@ -535,7 +537,6 @@ void Game::checkForWin()
 		{
 			if (indices[i] < 25) // check if index is in bounds (diagonals mainly)
 			{
-				//std::cout << "Checking tile index: " << indices[i] << " owned by: " << grid[indices[i]].getOwner() << std::endl << std::endl;
 				int owner = grid[indices[i]].getOwner();
 				if (owner == 2)
 				{
@@ -571,7 +572,6 @@ void Game::checkForWin()
 		}
 	}
 
-	//std::cout << "Checking Diagonals" << std::endl;
 	// Diagonal (top-left to bottom-right)
 	int diagStarts[][2] = { {0, 0}, {0, 1}, {1, 0} };
 	for (int i = 0; i < 3; i++)
@@ -594,7 +594,6 @@ void Game::checkForWin()
 		{
 			if (indices[i] < 25) // check if index is in bounds (diagonals mainly)
 			{
-				//std::cout << "Checking tile index: " << indices[i] << " owned by: " << grid[indices[i]].getOwner() << std::endl << std::endl;
 				int owner = grid[indices[i]].getOwner();
 				if (owner == 2)
 				{
@@ -652,7 +651,6 @@ void Game::checkForWin()
 		{
 			if (indices[i] < 25) // check if index is in bounds (diagonals mainly)
 			{
-				//std::cout << "Checking tile index: " << indices[i] << " owned by: " << grid[indices[i]].getOwner() << std::endl << std::endl;
 				int owner = grid[indices[i]].getOwner();
 				if (owner == 2)
 				{
@@ -695,9 +693,6 @@ void Game::checkForWin()
 /// </summary>
 void Game::setupTexts()
 {
-
-
-
 	if (!m_jerseyFont.openFromFile("ASSETS\\FONTS\\Jersey20-Regular.ttf"))
 	{
 		std::cout << "problem loading arial black font" << std::endl;
@@ -710,7 +705,13 @@ void Game::setupTexts()
 	m_DELETEwelcomeMessage.setFillColor(sf::Color::Red);
 	m_DELETEwelcomeMessage.setOutlineThickness(2.0f);
 
-
+	depthText.setFont(m_jerseyFont);
+	depthText.setString("AI Depth: 2");
+	depthText.setPosition(sf::Vector2f{ 10.0f, 520.0f });
+	depthText.setCharacterSize(24U);
+	depthText.setOutlineColor(sf::Color::Black);
+	depthText.setFillColor(sf::Color::White);
+	depthText.setOutlineThickness(2.0f);
 
 }
 

@@ -1,3 +1,9 @@
+/**
+ * @file Pieces.cpp
+ * @brief Piece movement implementation
+ * @author Dylan Manley & Jakub Stepien
+ */
+
 #include "Pieces.h"
 
 void pieces::setUp(sf::Texture &texture, sf::Vector2f position, PieceType t_type, bool ai)
@@ -19,7 +25,6 @@ void pieces::place(sf::Vector2f position)
 	pos = sf::Vector2f{ position.x + 8, position.y + 9 };
 	sprite->setPosition(pos);
 	shape.setPosition(sf::Vector2f(pos.x - 5, pos.y - 5));
-	//shape.setFillColor(sf::Color::Transparent);
 	placed = true;
 }
 
@@ -82,10 +87,6 @@ int pieces::getCurrentTileIndex(Tile grid[])
     {
         if (grid[i].getShape().getGlobalBounds().contains(pos))
         {
-            //std::cout << std::endl;
-			//std::cout << "Piece Position: (" << shape.getPosition().x << ", " << shape.getPosition().y << ")" << std::endl;
-			//std::cout << "Tile Position: (" << grid[i].getPosition().x << ", " << grid[i].getPosition().y << ")" << std::endl;
-			//std::cout << "Index Found: " << i << std::endl;
             return i;
         }
     }

@@ -1,7 +1,7 @@
 /// <summary>
 /// simple game loop for SFML[3.0]
 /// 
-/// author Pete Lowe May 2025
+/// author Dylan Manley & Jakub Stepien
 /// you need to change the above line or lose marks
 /// </summary>
 
@@ -25,7 +25,7 @@
 #include "Game.h"
 
 /// <summary>
-/// main enrtry point
+/// main entry point
 /// </summary>
 /// <returns>success or failure</returns>
 int main()

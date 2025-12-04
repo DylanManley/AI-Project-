@@ -1,0 +1,17 @@
+digraph "Game::update"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="Game::update",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Update game logic."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="Game::checkForWin",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_game.html#a601ab1c6f282b52542f548a32614d88a",tooltip="Check for win condition."];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="Game::checkKeyboardState",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_game.html#a55249c1379fd2c654bcb754273d5e9c5",tooltip="Check keyboard state."];
+  Node1 -> Node4 [id="edge3_Node000001_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="Game::clearMoves",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_game.html#af917f5c9482f6bc97040e49e7b4f5952",tooltip="Clear all move indicators."];
+  Node1 -> Node5 [id="edge4_Node000001_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="Game::showPossibleMoves",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_game.html#ab449f0e978f9c0b6da3f8e22f108a8a3",tooltip="Show possible moves for selected piece."];
+}
