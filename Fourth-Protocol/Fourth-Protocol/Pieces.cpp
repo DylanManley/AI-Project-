@@ -23,14 +23,15 @@ void pieces::place(sf::Vector2f position)
 	placed = true;
 }
 
-void pieces::SetMoves(Tile grid[], int index, int jumpOffset)
+int pieces::SetMoves(Tile grid[], int index, int jumpOffset)
 {
+    int count = 0;
     if (index >= 0 && index < 25)
     {
         if (!grid[index].isOccupied())
         {
             grid[index].setPossibleMove(true);
-            
+            count++;
         }
         else if (jumpOffset != 0)
         {
@@ -42,6 +43,7 @@ void pieces::SetMoves(Tile grid[], int index, int jumpOffset)
             }
         }
     }
+	return count;
 }
 
 void pieces::move(sf::Vector2f position)
@@ -80,41 +82,119 @@ PieceType pieces::getPieceType()
     return type;
 }
 
-void Donkey::showMoves(Tile grid[], int gridPos)
+int Donkey::showMoves(Tile grid[], int gridPos)
 {
+    int count = 0;
     //left
-    if (gridPos % 5 != 0) SetMoves(grid, gridPos - 1, 0);
+    if (gridPos % 5 != 0)
+    {
+        count += SetMoves(grid, gridPos - 1, 0);
+    }
     // Right
-    if (gridPos % 5 != 4) SetMoves(grid, gridPos + 1, 0);
+    if (gridPos % 5 != 4) 
+    {
+        count += SetMoves(grid, gridPos + 1, 0);;
+    } 
     // Up
-    if (gridPos - 5 >= 0) SetMoves(grid, gridPos - 5, 0);
+    if (gridPos - 5 >= 0)
+    {
+        count += SetMoves(grid, gridPos - 5, 0);
+    }   
     // Down
-    if (gridPos + 5 < 25) SetMoves(grid, gridPos + 5, 0);
+    if (gridPos + 5 < 25)
+    {
+        count += SetMoves(grid, gridPos + 5, 0);
+    }
+
+    return count;
 }
 
-void Snake::showMoves(Tile grid[], int gridPos)
+int Snake::showMoves(Tile grid[], int gridPos)
 {
-   
-    if (gridPos % 5 != 0) SetMoves(grid, gridPos - 1, 0);  //left
-    if (gridPos % 5 != 4) SetMoves(grid, gridPos + 1, 0); // Right
-    if (gridPos - 5 >= 0) SetMoves(grid, gridPos - 5, 0);  // Up
-    if (gridPos + 5 < 25) SetMoves(grid, gridPos + 5, 0); // Down
+    int count = 0;
 
-    if (gridPos % 5 != 0 && gridPos - 5 >= 0) SetMoves(grid, gridPos - 6, 0); // Up Left
-    if (gridPos % 5 != 4 && gridPos - 5 >= 0) SetMoves(grid, gridPos - 4, 0); // Up Right
-    if (gridPos % 5 != 0 && gridPos + 5 < 25) SetMoves(grid, gridPos + 4, 0); // Down Left
-    if (gridPos % 5 != 4 && gridPos + 5 < 25) SetMoves(grid, gridPos + 6, 0); // Down Right
+    //left
+    if (gridPos % 5 != 0)
+    {
+        count += SetMoves(grid, gridPos - 1, 0);
+    }
+    // Right
+    if (gridPos % 5 != 4)
+    {
+        count += SetMoves(grid, gridPos + 1, 0);
+    }
+    // Up
+    if (gridPos - 5 >= 0)
+    {
+        count += SetMoves(grid, gridPos - 5, 0);
+    }
+    // Down
+    if (gridPos + 5 < 25)
+    {
+        count += SetMoves(grid, gridPos + 5, 0);
+    }
+
+    // Up Left
+    if (gridPos % 5 != 0 && gridPos - 5 >= 0)
+    {
+        count += SetMoves(grid, gridPos - 6, 0);
+    }
+    // Up Right
+    if (gridPos % 5 != 4 && gridPos - 5 >= 0)
+    {
+        count += SetMoves(grid, gridPos - 4, 0);
+    }
+    // Down Left
+    if (gridPos % 5 != 0 && gridPos + 5 < 25)
+    {
+        count += SetMoves(grid, gridPos + 4, 0);
+    }
+    // Down Right
+    if (gridPos % 5 != 4 && gridPos + 5 < 25)
+    {
+        count += SetMoves(grid, gridPos + 6, 0); 
+    }
+
+    return count;
 }
 
-void Frog::showMoves(Tile grid[], int gridPos)
+int Frog::showMoves(Tile grid[], int gridPos)
 {
-    if (gridPos % 5 != 0) SetMoves(grid, gridPos - 1, -1);  //left
-    if (gridPos % 5 != 4) SetMoves(grid, gridPos + 1, 1); // Right
-    if (gridPos - 5 >= 0) SetMoves(grid, gridPos - 5, -5);  // Up
-    if (gridPos + 5 < 25) SetMoves(grid, gridPos + 5, 5); // Down
+    int count = 0;
 
-    if (gridPos % 5 != 0 && gridPos - 5 >= 0) SetMoves(grid, gridPos - 6, -6); // Up Left
-    if (gridPos % 5 != 4 && gridPos - 5 >= 0) SetMoves(grid, gridPos - 4, -4); // Up Right
-    if (gridPos % 5 != 0 && gridPos + 5 < 25) SetMoves(grid, gridPos + 4, 4); // Down Left
-    if (gridPos % 5 != 4 && gridPos + 5 < 25) SetMoves(grid, gridPos + 6, 6); // Down Right
+    if (gridPos % 5 != 0) //left
+    {
+        count += SetMoves(grid, gridPos - 1, -1);
+    }
+    if (gridPos % 5 != 4) // Right
+    {
+        count += SetMoves(grid, gridPos + 1, 1);
+    }
+    if (gridPos - 5 >= 0) // Up
+    {
+        count += SetMoves(grid, gridPos - 5, -5);
+    }
+    if (gridPos + 5 < 25) // Down
+    {
+        count += SetMoves(grid, gridPos + 5, 5);
+    }
+
+    if (gridPos % 5 != 0 && gridPos - 5 >= 0) // Up Left
+    {
+        count += SetMoves(grid, gridPos - 6, -6);
+    }
+    if (gridPos % 5 != 4 && gridPos - 5 >= 0) // Up Right
+    {
+        count += SetMoves(grid, gridPos - 4, -4);
+    }
+    if (gridPos % 5 != 0 && gridPos + 5 < 25) // Down Left
+    {
+        count += SetMoves(grid, gridPos + 4, 4);
+    }
+    if (gridPos % 5 != 4 && gridPos + 5 < 25) // Down Right
+    {
+        count += SetMoves(grid, gridPos + 6, 6);
+    }
+
+    return count;
 }

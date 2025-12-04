@@ -24,9 +24,9 @@ public:
 
     virtual void place(sf::Vector2f position);
 
-    virtual void SetMoves(Tile grid[], int index, int jumpOffset = 0);
+    virtual int SetMoves(Tile grid[], int index, int jumpOffset = 0);
 
-    virtual void showMoves(Tile grid[], int gridPos) = 0;
+    virtual int showMoves(Tile grid[], int gridPos) = 0;
 
     virtual void move(sf::Vector2f t_position);
 
@@ -38,17 +38,17 @@ public:
 class Donkey : public pieces
 {
 public:
-    virtual void showMoves(Tile grid[], int gridPos) override;
+    virtual int showMoves(Tile grid[], int gridPos) override;
 };
 
 class Snake : public pieces
 {
 public:
-    virtual void showMoves(Tile grid[], int gridPos) override;
+    virtual int showMoves(Tile grid[], int gridPos) override;
 };
 
 class Frog : public pieces
 {
 public:
-    virtual void showMoves(Tile grid[], int gridPos) override;
+    virtual int showMoves(Tile grid[], int gridPos) override;
 };

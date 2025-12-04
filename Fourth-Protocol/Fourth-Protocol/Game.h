@@ -41,7 +41,7 @@ private:
 	void update(sf::Time t_deltaTime);
 	void render();
 
-	void showPossibleMoves();
+	int showPossibleMoves();
 	void checkForWin();
 	
 	void setupTexts();

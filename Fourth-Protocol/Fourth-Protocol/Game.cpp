@@ -269,9 +269,17 @@ void Game::update(sf::Time t_deltaTime)
 						snake.selected = true;
 						snake.shape.setFillColor(sf::Color::Blue);
 
-						showPossibleMoves(); // Show moves for snake
-						
-						return;
+						if (showPossibleMoves() > 0)// Show moves for snake
+						{
+							return;
+						}
+						else
+						{
+							selectedPiece = nullptr;
+							snake.selected = false;
+							snake.shape.setFillColor(sf::Color::Green);
+							return;
+						}
 					}
 					if (frog.sprite->getGlobalBounds().contains(boardPos))
 					{
@@ -279,9 +287,17 @@ void Game::update(sf::Time t_deltaTime)
 						frog.selected = true;
 						frog.shape.setFillColor(sf::Color::Blue);
 
-						showPossibleMoves(); // Show moves for frog
-
-						return;
+						if (showPossibleMoves() > 0)// Show moves for frog
+						{
+							return;
+						}
+						else
+						{
+							selectedPiece = nullptr;
+							frog.selected = false;
+							frog.shape.setFillColor(sf::Color::Green);
+							return;
+						}
 					}
 					for (int i = 0; i < 3; i++)
 					{
@@ -291,9 +307,17 @@ void Game::update(sf::Time t_deltaTime)
 							donkey[i].selected = true;
 							donkey[i].shape.setFillColor(sf::Color::Blue);
 
-							showPossibleMoves(); // Show moves for donkey
-
-							return;
+							if (showPossibleMoves() > 0)// Show moves for donkey
+							{
+								return;
+							}
+							else
+							{
+								selectedPiece = nullptr;
+								donkey[i].selected = false;
+								donkey[i].shape.setFillColor(sf::Color::Green);
+								return;
+							}
 						}
 					}
 					/*for (int i = 0; i < 25; i++)
@@ -306,6 +330,7 @@ void Game::update(sf::Time t_deltaTime)
 				{
 					int currentTileIndex = selectedPiece->getCurrentTileIndex(grid);
 					grid[currentTileIndex].setOccupied(false);
+					grid[currentTileIndex].setOwner(0);
 					for (int i = 0; i < GRID_SIZE; i++)
 					{
 						if (grid[i].isHovered(boardPos) && grid[i].isPossibleMove())
@@ -407,7 +432,7 @@ void Game::render()
 	m_window.display();
 }
 
-void Game::showPossibleMoves()
+int Game::showPossibleMoves()
 {
 	/*for (int i = 0; i < GRID_SIZE; i++)
 	{
@@ -416,10 +441,12 @@ void Game::showPossibleMoves()
 			selectedPiece->showMoves(grid, i);
 		}
 	}*/
+	int count = 0;
 
 	int currentTileIndex = selectedPiece->getCurrentTileIndex(grid);
-	selectedPiece->showMoves(grid, currentTileIndex);
+	count = selectedPiece->showMoves(grid, currentTileIndex);
 
+	return count;
 }
 
 
